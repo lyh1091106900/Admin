@@ -8,8 +8,8 @@ module.exports = [
         key: 'create',
         name: '新建模块',
         icon: 'file',
-        isMenuTab: false,
-        clickable: false
+       // isMenuTab: false,
+       // clickable: false
       },
       {
         key: 'edit',
@@ -36,8 +36,8 @@ module.exports = [
         key: 'info',
         name: '接口详情',
         icon: 'code-o',
-        // isMenuTab: false,
-        // clickable: false
+       // isMenuTab: false,
+       // clickable: false
       },
     ]
   },

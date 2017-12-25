@@ -40,10 +40,10 @@ export default {
 			if (payload.id) {
 				params.id = payload.id;
 				data = yield call(update, params);
-				tableData = yield call(updateTable,{tableName:payload.template,data:JSON.parse(payload.cont)});
+				tableData = yield call(updateTable,{tableName:payload.template,data:payload.cont});
 			} else {
 				data = yield call(save, params);
-				tableData = yield call(addTable,{tableName:payload.template,data:JSON.parse(payload.cont)});
+				tableData = yield call(addTable,{tableName:payload.template,data:payload.cont});
 			}
 
 			yield put({ type: 'loadTableSuccess', payload: data });

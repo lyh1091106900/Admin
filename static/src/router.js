@@ -22,8 +22,8 @@ const Routers = function ({ history, app }) {
         }, 'tableManager')
       },
       childRoutes: [{
-          path: 'showApi',
-          name: 'showApi',
+          path: 'showApi/info',
+          name: 'showApi/info',
           getComponent (nextState, cb) {
             require.ensure([], require => {
               registerModel(app, require('./models/showApi'))
@@ -31,8 +31,8 @@ const Routers = function ({ history, app }) {
             }, 'showApi')
           },
         },{
-          path: 'tableManager',
-          name: 'tableManager',
+          path: 'tableManager/create',
+          name: 'tableManager/create',
           getIndexRoute (nextState, cb) {
             require.ensure([], require => {
               registerModel(app, require('./models/tableManager'))

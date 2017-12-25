@@ -24,7 +24,7 @@ const fetch = (options) => {
         params.append(key, data[key]);
       }
       console.log('fetch',)
-      return axios.post(url, { params: data });
+      return axios.post(url, data,_options );
     }
     case 'put':
       return axios.put(url, data, _options);
