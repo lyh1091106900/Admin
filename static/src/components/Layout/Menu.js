@@ -12,14 +12,14 @@ const getMenus = function (menuArray, siderFold, parentPath = '/') {
         const subMenus = getMenus(item.child || [], siderFold, `${linkTo}/`);
 
       if (subMenus && subMenus.length > 0) {
-        console.log('subMenus',subMenus,subMenus.length)
+       // console.log('subMenus',subMenus,subMenus.length)
         menuArr.push(
           <Menu.SubMenu key={linkTo} title={<span>{item.icon ? <Icon type={item.icon} /> : ''}{siderFold && topMenus.indexOf(item.key) >= 0 ? '' : item.name}</span>}>
             { subMenus }
           </Menu.SubMenu>
         )
       } else {
-        console.log('subMenus',subMenus,subMenus.length)
+       // console.log('subMenus',subMenus,subMenus.length)
         menuArr.push(
           <Menu.Item key={linkTo}>
 

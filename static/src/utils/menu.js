@@ -8,8 +8,8 @@ module.exports = [
         key: 'create',
         name: '新建模块',
         icon: 'file',
-       // isMenuTab: false,
-       // clickable: false
+       isMenuTab: false,
+       clickable: false
       },
       {
         key: 'edit',
@@ -41,7 +41,69 @@ module.exports = [
       },
     ]
   },
- 
+  {
+    key: 'CambodiaChress',
+    name: '柬埔寨象棋',
+    icon: 'api',
+    child: [
+      {
+        key: 'playerQuery',
+        name: '查看用户',
+        icon: 'code-o',
+       // isMenuTab: false,
+       // clickable: false
+      },
+      {
+        key: 'gamesQuery',
+        name: '查看局数',
+        icon: 'code-o',
+       // isMenuTab: false,
+       // clickable: false
+      },
+      {
+        key: 'expendsManager',
+        name: '推广管理',
+        icon: 'code-o',
+       // isMenuTab: false,
+       // clickable: false
+      },
+      {
+        key: 'playerPaysInfo',
+        name: '用户充值统计',
+        icon: 'code-o',
+       // isMenuTab: false,
+       // clickable: false
+      },
+      {
+        key: 'gameHistory',
+        name: '游戏记录统计',
+        icon: 'code-o',
+       // isMenuTab: false,
+       // clickable: false
+      },
+      {
+        key: 'noticeManager',
+        name: '公告管理',
+        icon: 'code-o',
+       // isMenuTab: false,
+       // clickable: false
+      },
+      {
+        key: 'carouselInfoManager',
+        name: '轮播信息管理',
+        icon: 'code-o',
+       // isMenuTab: false,
+       // clickable: false
+      },
+      {
+        key: 'blacklist',
+        name: '黑名单',
+        icon: 'code-o',
+       // isMenuTab: false,
+       // clickable: false
+      },
+    ]
+  },
 ]
 // icon: 'laptop',
 // icon: 'user',

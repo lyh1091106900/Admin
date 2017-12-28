@@ -1,7 +1,7 @@
 module.exports = app => {
   class RestqlService extends app.Service {
     * index(modal,query,condition={}) {
-        console.log(modal);
+      //  console.log(modal);
       const offset = (parseInt(query.page)-1)*parseInt(query.pageSize);
       const record = yield this.app.mysql.select(modal, { 
         where:condition,
@@ -17,16 +17,17 @@ module.exports = app => {
         conditionstr = conditionstr.substring(0,conditionstr.lastIndexOf(' and '));
       };
       const totalsql = 'select count(*) as total from ' + modal + conditionstr;
+     // console.log(modal,totalsql);
       const totalRecord = yield this.app.mysql.query(totalsql);
       return {record,totalRecord:totalRecord[0].total};
     }
     * show(modal,params) {
-        console.log(modal);
       const modalId = yield this.service.tableinfo.primaryKey(modal);
-        console.log(modalId);
       let condition = {};
       condition[modalId] = params.id;
+      console.log(modal,condition);
       let record =  yield this.app.mysql.get(modal, condition);
+      console.log(record);
       return record;
     }
     * update(modal,id,request) {
@@ -40,10 +41,12 @@ module.exports = app => {
       }
       upstr += ` where ${modalId} = ?`;
       upEscape.push(id);
+      console.log('update',upstr,upEscape)
       let result =  yield app.mysql.query(upstr, upEscape);
       return result;
     }
     * create(modal,request) {
+      console.log('create',modal,request);
       const result = yield this.app.mysql.insert(modal, request);
       return result;
     }

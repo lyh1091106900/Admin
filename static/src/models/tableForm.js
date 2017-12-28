@@ -19,6 +19,7 @@ export default {
 	effects: {
 		*loadTable({ payload }, { call, put }) {
 			const data = yield call(loadTable, payload);
+			console.log('loadTable',data)
 			if (data && data.success) {
 				yield put({ type: 'loadTableSuccess', payload: data });
 			}
@@ -28,7 +29,7 @@ export default {
 			let data = null,tableData=null;
 			const callback = payload.callback;
 			delete payload.callback;
-				console.log("payload",payload);
+			//	console.log("payload",payload);
 			const params = {
 				template: payload.template || "",
 				template_name: payload.template_name,

@@ -10,12 +10,12 @@ import '../components/skin.less'
 const { Header, Bread, Footer, Sider, styles } = Layout;
 let loginPage = '';
 
-const App = ({ children, location, dispatch, app, loading }) => {
-  console.log('App','children:',children,'location:', location, 'dispatch:',dispatch, 'app:',app, 'loading:',loading )
+const App = ({ children, location, dispatch, app, loading }) => { //与router.js注册后有关
+  //console.log('App','children:',children,'location:', location, 'dispatch:',dispatch, 'app:',app, 'loading:',loading )
   if (!loginPage) {
     loginPage = window.location.href;
   }
-  const { login, loginButtonLoading, user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys } = app
+  const { login, loginButtonLoading, user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys } = app //login, loginButtonLoading, user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys 来自model/app.js
   const loginProps = {
     loading,
     loginButtonLoading,
