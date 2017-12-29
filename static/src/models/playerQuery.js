@@ -17,7 +17,7 @@ export default {
 
   effects: {
     *loadPlayerQuery({ payload }, { call, put }) {
-      console.log('loadPlayerQuery')
+      console.log('loadPlayerQuery',payload)
       yield put({ type: 'showLoading' });
       payload.sortField = 'time';
       payload.sortOrder = 'desc';
@@ -39,7 +39,6 @@ export default {
       yield put({ type: 'showLoading' });
       const data = yield call(remove, payload);
         console.log("delete payload",payload);
-      const tableData = yield call(removeTable,payload);
       if (data && data.success) {
         yield put({
           type: 'loadPlayerQuery',

@@ -54,7 +54,7 @@ export default {
     },
 
     *updateTableManager({ payload }, { call, put }) {
-      console.log('updateTableManager')
+     // console.log('updateTableManager')
       yield put({ type: 'showLoading' });
       const page = payload.page;
       const pageSize = payload.pageSize;
@@ -91,6 +91,7 @@ export default {
     },
     loadTableManagerSuccess(state, action) {
       const actionData = action.payload.data;
+      console.log('loadTableManagerSuccess',actionData);
       return {
         ...state, 
         list: actionData.data.record,
