@@ -109,6 +109,26 @@ const Routers = function ({ history, app }) {
               },
             ]
             },  
+            {
+              path: 'playerPaysInfo',
+              name: 'playerPaysInfo',
+              getComponent(nextState, cb) {
+                require.ensure([], require => {
+                  registerModel(app, require('./models/playerPaysInfo'));
+                  cb(null, require('./routes/playerPaysInfo/'))
+                }, 'playerPaysInfo')
+              },
+             },
+            {
+              path: 'expendsManager',
+              name: 'expendsManager',
+              getComponent(nextState, cb) {
+                require.ensure([], require => {
+                  registerModel(app, require('./models/expendsManager'));
+                  cb(null, require('./routes/expendsManager/'))
+                }, 'expendsManager')
+              },
+            },
           ]
         }
       ],

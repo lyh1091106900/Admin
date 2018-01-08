@@ -6,21 +6,24 @@ exports.index = function* () {
   const response = { success: false, message: '操作失败', }
   var res = this.params.res;
   const tableList = yield this.service.tableinfo.index();
+  console.log('query0',this.query,this.query['tid']);
   if (res && this.helper.inarray(tableList, res)) {
-    var condition;
+    var condition={};
    
     if (this.query.startTime && this.query.endTime) {
       condition = { startTime: this.query.startTime, endTime: this.query.endTime }
     }
     var searchInfo = tableSearchInfo[res];
+   
     if(searchInfo)
     for (var i = 0; i < searchInfo.length; i++) {
+      console.log('query1',this.query[searchInfo[i]],condition[searchInfo[i]]);
       //console.log(this.query[searchInfo[i]]);
       if (this.query[searchInfo[i]]) {
         condition[searchInfo[i]]=this.query[searchInfo[i]]
       }
     }
-    console.log(this.query,condition);
+    console.log('query2',this.query,this.query['tid']);
     const result = yield this.service.restql.index(res, this.query, condition);
     if (result) {
       response.message = '操作成功'

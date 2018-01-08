@@ -5,6 +5,7 @@ import { menu } from '../../utils'
 
 const topMenus = menu.map(item => item.key)
 const getMenus = function (menuArray, siderFold, parentPath = '/') {
+ // console.log(menuArray)
   const menuArr = [];
   menuArray.map(item => {
     if (item.isMenuTab !== false) {
@@ -22,7 +23,6 @@ const getMenus = function (menuArray, siderFold, parentPath = '/') {
        // console.log('subMenus',subMenus,subMenus.length)
         menuArr.push(
           <Menu.Item key={linkTo}>
-
             <Link to={linkTo}>
               {item.icon ? <Icon type={item.icon} /> : ''}
               {siderFold && topMenus.indexOf(item.key) >= 0 ? '' : item.name}
@@ -32,11 +32,12 @@ const getMenus = function (menuArray, siderFold, parentPath = '/') {
       }
     }
   });
-
+// console.log(menuArr);
   return menuArr;
 }
 
 function Menus ({ siderFold, darkTheme, location, handleClickNavMenu, navOpenKeys, changeOpenKeys }) {
+  //console.log('Menus',menu);
   const menuItems = getMenus(menu, siderFold)
 
   const getAncestorKeys = (key) => {

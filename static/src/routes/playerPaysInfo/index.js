@@ -7,13 +7,13 @@ var gstartTime, gendTime, gtid;
 const { MonthPicker, RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const columns = [
-	{ title: '序号', dataIndex: 'tid' },
-	{ title: '模块', dataIndex: 'name' },
-	{ title: '链接', dataIndex: 'link' },
-	{ title: '顺序', dataIndex: 'ord' },
-	{ title: '时间', dataIndex: 'time' },
-	{ title: '状态', dataIndex: 'status' },
-	{ title: '操作', width: 150 },
+	{ title: '订单号', dataIndex: 'orderID' },
+	{ title: '付款金额', dataIndex: 'pay_money' },
+	{ title: '商品ID', dataIndex: 'productID' },
+	{ title: '订单时间', dataIndex: 'time' },
+	{ title: '订单状态', dataIndex: 'order_flag' },
+	{ title: '用户ID', dataIndex: 'userid' },
+	{ title: '用户昵称', dataIndex: 'name' },
 
 ];
 
@@ -23,7 +23,7 @@ const linkStyle = {
 	cursor: 'pointer'
 };
 
-class playerQuery extends Component {
+class playerPaysInfo extends Component {
 	static contextTypes = {
 		router: PropTypes.object
 	}
@@ -31,17 +31,12 @@ class playerQuery extends Component {
 	constructor(props, context) {
 		super(props, context);
 
-		const len = columns.length;
-		columns[len - 1].render = (text, record, index) => {
-			return (<div>
-				<span onClick={this.toplayerQueryForm.bind(this, record.tid)} style={linkStyle}>编辑</span>
-			</div>)
-		}
-		columns[len - 2].render = (text, record) => {
-			return <Switch checked={!!text} onChange={this.changeplayerQueryState.bind(this, record)} checkedChildren={'开'} unCheckedChildren={'关'} />
-		}
+		 const len = columns.length;
 		columns[len - 3].render = (text, record) => {
-			var time = new Date(record.time * 1000)
+		  return record.order_flag==1?'已支付':'待支付';
+		}
+		columns[len - 4].render = (text, record) => {
+			var time = new Date(record.time)
 			return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
 		}
 	}
@@ -50,8 +45,8 @@ class playerQuery extends Component {
 		this.loadTableData();
 	}
 
-	loadTableData(page = 1, pageSize = 10, startTime, endTime, tid) {
-		this.props.dispatch({ type: 'playerQuery/loadPlayerQuery', payload: { page, pageSize, startTime, endTime, tid } });
+	loadTableData(page = 1, pageSize = 10, startTime, endTime, orderID) {
+		this.props.dispatch({ type: 'playerPaysInfo/loadPlayerPaysInfo', payload: { page, pageSize, startTime, endTime, orderID } });
 	}
 
 	tableChange(pagination) {
@@ -62,23 +57,23 @@ class playerQuery extends Component {
 	}
 
 	selectRow(selectedRowKeys) {
-		console.log('selectRow',selectedRowKeys)
-		this.props.dispatch({ type: 'playerQuery/selectedRowKeys', payload: { selectedRowKeys } });
+		console.log('selectRows',selectedRowKeys)
+		this.props.dispatch({ type: 'playerPaysInfo/selectedRowKeys', payload: { selectedRowKeys } });
 	}
 
 	toplayerQueryForm(tid) {
-		if (tid) {
-			this.context.router.push({ pathname: `/CambodiaChress/playerQuery/edit/${tid}` });
-		} else {
-			this.context.router.push({ pathname: '/CambodiaChress/playerQuery/create' });
-		}
+		// if (tid) {
+		// 	this.context.router.push({ pathname: `/CambodiaChress/playerQuery/edit/${tid}` });
+		// } else {
+		// 	this.context.router.push({ pathname: '/CambodiaChress/playerQuery/create' });
+		// }
 	}
 
 	changeplayerQueryState(record) {
 		console.log("switchChange", record);
 		const status = record.status ? 0 : 1;
 		this.props.dispatch({
-			type: 'playerQuery/loadPlayerQuery', payload: {
+			type: 'playerPaysInfo/loadPlayerPaysInfo', payload: {
 				...record,
 				status,
 				page: this.props.pagination.current,
@@ -100,7 +95,7 @@ class playerQuery extends Component {
 							templateArr.push(v.template);
 						}
 					});
-					this.props.dispatch({ type: 'playerQuery/removePlayerQuery', payload: { selectedRowKeys: this.props.selectedRowKeys, templateArr } })
+					this.props.dispatch({ type: 'playerPaysInfo/removePlayerPaysInfo', payload: { selectedRowKeys: this.props.selectedRowKeys, templateArr } })
 				}
 			});
 		} else {
@@ -121,9 +116,9 @@ class playerQuery extends Component {
 				console.log(Date.parse(new Date(dateString[i])), dateString[i])
 				timeArray.push(Date.parse(new Date(dateString[i])))
 			}
-			gstartTime = timeArray[0] / 1000;
-			gendTime = timeArray[1] / 1000;
-			//this.loadTableData(1, 10, gstartTime, gendTime);
+			gstartTime = timeArray[0] ;
+			gendTime = timeArray[1] ;
+			this.loadTableData(1, 10, gstartTime, gendTime);
 		}
 		else {
 			gstartTime = null;
@@ -159,8 +154,8 @@ class playerQuery extends Component {
 		return (
 			<div className="content-inner">
 				<div style={{ paddingBottom: 10, marginBottom: 20, borderBottom: '1px solid #ddd' }}>
-					<Button type="primary" onClick={this.toplayerQueryForm.bind(this, 0)} style={{ marginRight: 10 }}>新增</Button>
-					<Button type="primary" onClick={this.deleteplayerQuery.bind(this)} style={{ marginRight: 10 }}>删除</Button>
+					{/* <Button type="primary" onClick={this.toplayerQueryForm.bind(this, 0)} style={{ marginRight: 10 }}>新增</Button>
+					<Button type="primary" onClick={this.deleteplayerQuery.bind(this)} style={{ marginRight: 10 }}>删除</Button> */}
 					<RangePicker style={{ marginRight: 10 }}
 						format={dateFormat}
 						onChange={this.dateSearch.bind(this)}
@@ -174,7 +169,7 @@ class playerQuery extends Component {
 					rowSelection={rowSelection}
 					pagination={pagination}
 					dataSource={this.props.list}
-					rowKey="tid"
+					rowKey="orderID"
 					loading={this.props.loading}
 					bordered
 					onChange={this.tableChange.bind(this)} />
@@ -183,12 +178,12 @@ class playerQuery extends Component {
 	}
 };
 
-export default connect(({ playerQuery }) => {
+export default connect(({ playerPaysInfo }) => {
 	return {
-		list: playerQuery.list,
-		loading: playerQuery.loading,
-		total: playerQuery.total,
-		selectedRowKeys: playerQuery.selectedRowKeys,
-		pagination: playerQuery.pagination
+		list: playerPaysInfo.list,
+		loading: playerPaysInfo.loading,
+		total: playerPaysInfo.total,
+		selectedRowKeys: playerPaysInfo.selectedRowKeys,
+		pagination: playerPaysInfo.pagination
 	}
-})(playerQuery);
+})(playerPaysInfo);
