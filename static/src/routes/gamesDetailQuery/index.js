@@ -9,8 +9,15 @@ const dateFormat = 'YYYY-MM-DD';
 const columns = [
 	{ title: '用户ID', dataIndex: 'userid' },
 	{ title: '名称', dataIndex: 'name' },
-	{ title: '时间', dataIndex: 'time' },
-	{ title: '奖励金额', dataIndex: 'rewards_coin' },
+	{ title: '开始时间', dataIndex: 'start_time' },
+	{ title: '结束时间', dataIndex: 'end_time' },
+	{ title: '游戏种类', dataIndex: 'game_type' },
+	{ title: '游戏模式', dataIndex: 'game_mode' },
+	{ title: '进入货币', dataIndex: 'thing_take_in' },
+	{ title: '出去货币', dataIndex: 'thing_take_out' },
+	{ title: '进入积分', dataIndex: 'credits_take_in' },
+	{ title: '出去积分', dataIndex: 'credits_take_out' },
+	{ title: '中间充值钻石', dataIndex: 'buy_during_game' },
 ];
 
 const linkStyle = {
@@ -19,7 +26,7 @@ const linkStyle = {
 	cursor: 'pointer'
 };
 
-class expendsManager extends Component {
+class gamesDetailQuery extends Component {
 	static contextTypes = {
 		router: PropTypes.object
 	}
@@ -28,9 +35,17 @@ class expendsManager extends Component {
 		super(props, context);
 
 		 const len = columns.length;
-		console.log('colunm',len,columns)
-		columns[len - 2].render = (text, record) => {
-			var time = new Date(record.time)
+		//console.log('colunm',len,columns)
+		columns[len - 9].render = (text, record) => {
+			let time = new Date(record.start_time)
+			return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
+		}
+		columns[len - 8].render = (text, record) => {
+			let time = new Date(record.end_time)
+			return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
+		}
+		columns[len - 8].render = (text, record) => {
+			let time = new Date(record.end_time)
 			return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
 		}
 	}
@@ -40,7 +55,7 @@ class expendsManager extends Component {
 	}
 
 	loadTableData(page = 1, pageSize = 10, startTime, endTime, orderID) {
-		this.props.dispatch({ type: 'expendsManager/loadExpendsInfo', payload: { page, pageSize, startTime, endTime, orderID } });
+		this.props.dispatch({ type: 'gamesDetailQuery/loadGamesDetail', payload: { page, pageSize, startTime, endTime, orderID } });
 	}
 
 	tableChange(pagination) {
@@ -51,7 +66,7 @@ class expendsManager extends Component {
 	}
 
 	selectRow(selectedRowKeys) {
-		this.props.dispatch({ type: 'expendsManager/selectedRowKeys', payload: { selectedRowKeys } });
+		this.props.dispatch({ type: 'gamesDetailQuery/selectedRowKeys', payload: { selectedRowKeys } });
 	}
 
 	toplayerQueryForm(tid) {
@@ -66,7 +81,7 @@ class expendsManager extends Component {
 		console.log("switchChange", record);
 		const status = record.status ? 0 : 1;
 		this.props.dispatch({
-			type: 'expendsManager/loadExpendsInfo', payload: {
+			type: 'expendsManager/loadGamesDetail', payload: {
 				...record,
 				status,
 				page: this.props.pagination.current,
@@ -88,7 +103,7 @@ class expendsManager extends Component {
 							templateArr.push(v.template);
 						}
 					});
-					this.props.dispatch({ type: 'expendsManager/removeExpendsInfo', payload: { selectedRowKeys: this.props.selectedRowKeys, templateArr } })
+					this.props.dispatch({ type: 'gamesDetailQuery/removeGamesDetail', payload: { selectedRowKeys: this.props.selectedRowKeys, templateArr } })
 				}
 			});
 		} else {
@@ -162,7 +177,7 @@ class expendsManager extends Component {
 					rowSelection={rowSelection}
 					pagination={pagination}
 					dataSource={this.props.list}
-					rowKey="expandID"
+					rowKey="game_detailID"
 					loading={this.props.loading}
 					bordered
 					onChange={this.tableChange.bind(this)} />
@@ -171,12 +186,12 @@ class expendsManager extends Component {
 	}
 };
 
-export default connect(({ expendsManager }) => {
+export default connect(({ gamesDetailQuery }) => {
 	return {
-		list: expendsManager.list,
-		loading: expendsManager.loading,
-		total: expendsManager.total,
-		selectedRowKeys: expendsManager.selectedRowKeys,
-		pagination: expendsManager.pagination
+		list: gamesDetailQuery.list,
+		loading: gamesDetailQuery.loading,
+		total: gamesDetailQuery.total,
+		selectedRowKeys: gamesDetailQuery.selectedRowKeys,
+		pagination: gamesDetailQuery.pagination
 	}
-})(expendsManager);
+})(gamesDetailQuery);

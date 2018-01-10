@@ -9,6 +9,7 @@ module.exports = app => {
         conditionstr = " where ";
         for (const key in condition) {//key除了StartTime,endTime外对应标的字段名
           if (key == 'startTime') {
+          
             conditionstr = conditionstr + 'time' + " >= " + condition[key] + ' and ';
           }
           else if (key == 'endTime') {
@@ -30,6 +31,38 @@ module.exports = app => {
       const totalRecord = yield this.app.mysql.query(totalsql);
       return { record, totalRecord: totalRecord[0].total };
     }
+    * indexGameDetail(modal, query, condition = {}) {
+      // console.log('select',this.app.mysql.select);
+       const offset = (parseInt(query.page) - 1) * parseInt(query.pageSize);
+      console.log(condition)
+      let conditionstr = "",conditionstrtotal="";
+      if (JSON.stringify(condition) != "{}") {
+        conditionstr = " where ";
+        for (const key in condition) {//key除了StartTime,endTime外对应标的字段名
+          if (key == 'startTime') {
+          
+            conditionstr = conditionstr + 'start_time' + " >= " + condition[key] + ' and ';
+          }
+          else if (key == 'endTime') {
+            conditionstr = conditionstr + 'start_time' + " <= " + condition[key] + ' and ';
+          }
+          else {
+            conditionstr = conditionstr + key + " = " + condition[key] + ' and ';
+          }
+        }
+       conditionstrtotal = conditionstr.substring(0, conditionstr.lastIndexOf(' and '));
+      // console.log(conditionstrtotal,1)
+      };
+       conditionstr =conditionstrtotal+' LIMIT ' + offset + ', ' + parseInt(query.pageSize);
+      // console.log(conditionstrtotal,1111)
+      let sql = 'select * from ' + modal + conditionstr;
+      let totalsql = 'select count(*) as total from ' + modal + conditionstrtotal;
+      console.log(sql, totalsql);
+      const record=yield this.app.mysql.query(sql);
+      const totalRecord = yield this.app.mysql.query(totalsql);
+      return { record, totalRecord: totalRecord[0].total };
+    }
+
     * show(modal, params) {
       const modalId = yield this.service.tableinfo.primaryKey(modal);
       let condition = {};

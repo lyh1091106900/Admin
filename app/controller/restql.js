@@ -1,12 +1,13 @@
 // 1 获取内容列表，分页，每页几个
 var tableSearchInfo = {
-  web_newstype: ['tid']
+  web_newstype: ['tid'],
+  t_player_game_detail : ['userid'],
 }
 exports.index = function* () {
   const response = { success: false, message: '操作失败', }
   var res = this.params.res;
   const tableList = yield this.service.tableinfo.index();
-  console.log('query0',this.query,this.query['tid']);
+  //console.log('query0',this.query,this.query['tid']);
   if (res && this.helper.inarray(tableList, res)) {
     var condition={};
    
@@ -24,7 +25,14 @@ exports.index = function* () {
       }
     }
     console.log('query2',this.query,this.query['tid']);
-    const result = yield this.service.restql.index(res, this.query, condition);
+    let result;
+    if(res=='t_player_game_detail'){
+       result = yield this.service.restql.indexGameDetail(res, this.query, condition);
+    }
+    else{
+       result = yield this.service.restql.index(res, this.query, condition);
+    }
+   
     if (result) {
       response.message = '操作成功'
       response.success = true

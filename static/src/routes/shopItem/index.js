@@ -7,10 +7,20 @@ var gstartTime, gendTime, gtid;
 const { MonthPicker, RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const columns = [
-	{ title: '用户ID', dataIndex: 'userid' },
-	{ title: '名称', dataIndex: 'name' },
-	{ title: '时间', dataIndex: 'time' },
-	{ title: '奖励金额', dataIndex: 'rewards_coin' },
+	{ title: '商品ID', dataIndex: 'productID' },
+	{ title: '英文名称', dataIndex: 'name_En' },
+	{ title: '柬埔寨名称', dataIndex: 'name_Km' },
+	{ title: '英文介绍', dataIndex: 'introduce_En' },
+	{ title: '柬埔寨介绍', dataIndex: 'introduce_Km' },
+	{ title: '启用标志位', dataIndex: 'use_flag' },
+	{ title: 'hot标志位', dataIndex: 'hot_flag' },
+	{ title: '创建时间', dataIndex: 'creat_time' },
+	{ title: '修改时间', dataIndex: 'modify_time' },
+	{ title: '英文图片', dataIndex: 'picture_En' },
+	{ title: '柬埔寨图片', dataIndex: 'picture_Km' },
+	{ title: '价格', dataIndex: 'price'},
+	{ title: '操作', width: 150 },
+
 ];
 
 const linkStyle = {
@@ -19,7 +29,7 @@ const linkStyle = {
 	cursor: 'pointer'
 };
 
-class expendsManager extends Component {
+class shopItem extends Component {
 	static contextTypes = {
 		router: PropTypes.object
 	}
@@ -27,46 +37,54 @@ class expendsManager extends Component {
 	constructor(props, context) {
 		super(props, context);
 
-		 const len = columns.length;
-		console.log('colunm',len,columns)
-		columns[len - 2].render = (text, record) => {
-			var time = new Date(record.time)
-			return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
+		const len = columns.length;
+		columns[len - 1].render = (text, record, index) => {
+			return (<div>
+				<span onClick={this.toShopItemForm.bind(this, record.productID)} style={linkStyle}>编辑</span>
+			</div>)
 		}
+		// columns[len - 2].render = (text, record) => {
+		// 	return <Switch checked={!!text} onChange={this.changeplayerQueryState.bind(this, record)} checkedChildren={'开'} unCheckedChildren={'关'} />
+		// }
+		// columns[len - 3].render = (text, record) => {
+		// 	var time = new Date(record.time * 1000)
+		// 	return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
+		// }
 	}
 
 	componentDidMount() {
 		this.loadTableData();
 	}
 
-	loadTableData(page = 1, pageSize = 10, startTime, endTime, orderID) {
-		this.props.dispatch({ type: 'expendsManager/loadExpendsInfo', payload: { page, pageSize, startTime, endTime, orderID } });
+	loadTableData(page = 1, pageSize = 10, startTime, endTime, tid) {
+		this.props.dispatch({ type: 'shopItem/loadShopItem', payload: { page, pageSize, startTime, endTime, tid } });
 	}
 
 	tableChange(pagination) {
-		if (gstartTime && gendTime)
-			this.loadTableData(pagination.current, pagination.pageSize, gstartTime, gendTime);
-		else
-			this.loadTableData(pagination.current, pagination.pageSize);
+		// if (gstartTime && gendTime)
+		// 	this.loadTableData(pagination.current, pagination.pageSize, gstartTime, gendTime);
+		// else
+		// 	this.loadTableData(pagination.current, pagination.pageSize);
 	}
 
 	selectRow(selectedRowKeys) {
-		this.props.dispatch({ type: 'expendsManager/selectedRowKeys', payload: { selectedRowKeys } });
+		console.log('selectRow',selectedRowKeys)
+		this.props.dispatch({ type: 'shopItem/selectedRowKeys', payload: { selectedRowKeys } });
 	}
 
-	toplayerQueryForm(tid) {
-		// if (tid) {
-		// 	this.context.router.push({ pathname: `/CambodiaChress/playerQuery/edit/${tid}` });
-		// } else {
-		// 	this.context.router.push({ pathname: '/CambodiaChress/playerQuery/create' });
-		// }
+	toShopItemForm(productID) {
+		if (productID) {
+			this.context.router.push({ pathname: `/CambodiaChress/playerQuery/edit/${productID}` });
+		} else {
+			this.context.router.push({ pathname: '/CambodiaChress/playerQuery/create' });
+		}
 	}
 
 	changeplayerQueryState(record) {
 		console.log("switchChange", record);
 		const status = record.status ? 0 : 1;
 		this.props.dispatch({
-			type: 'expendsManager/loadExpendsInfo', payload: {
+			type: 'shopItem/loadShopItem', payload: {
 				...record,
 				status,
 				page: this.props.pagination.current,
@@ -75,7 +93,7 @@ class expendsManager extends Component {
 		});
 	}
 
-	deleteplayerQuery() {
+	deleteShopItemForm() {
 
 		if (this.props.selectedRowKeys.length > 0) {
 			Modal.confirm({
@@ -88,7 +106,7 @@ class expendsManager extends Component {
 							templateArr.push(v.template);
 						}
 					});
-					this.props.dispatch({ type: 'expendsManager/removeExpendsInfo', payload: { selectedRowKeys: this.props.selectedRowKeys, templateArr } })
+					this.props.dispatch({ type: 'shopItem/removeShopItem', payload: { selectedRowKeys: this.props.selectedRowKeys, templateArr } })
 				}
 			});
 		} else {
@@ -109,9 +127,9 @@ class expendsManager extends Component {
 				console.log(Date.parse(new Date(dateString[i])), dateString[i])
 				timeArray.push(Date.parse(new Date(dateString[i])))
 			}
-			gstartTime = timeArray[0] ;
-			gendTime = timeArray[1] ;
-			this.loadTableData(1, 10, gstartTime, gendTime);
+			gstartTime = timeArray[0] / 1000;
+			gendTime = timeArray[1] / 1000;
+			//this.loadTableData(1, 10, gstartTime, gendTime);
 		}
 		else {
 			gstartTime = null;
@@ -147,11 +165,11 @@ class expendsManager extends Component {
 		return (
 			<div className="content-inner">
 				<div style={{ paddingBottom: 10, marginBottom: 20, borderBottom: '1px solid #ddd' }}>
-					{/* <Button type="primary" onClick={this.toplayerQueryForm.bind(this, 0)} style={{ marginRight: 10 }}>新增</Button>
-					<Button type="primary" onClick={this.deleteplayerQuery.bind(this)} style={{ marginRight: 10 }}>删除</Button> */}
+					<Button type="primary" onClick={this.toShopItemForm.bind(this, 0)} style={{ marginRight: 10 }}>新增</Button>
+					<Button type="primary" onClick={this.deleteShopItemForm.bind(this)} style={{ marginRight: 10 }}>删除</Button>
 					<RangePicker style={{ marginRight: 10 }}
 						format={dateFormat}
-						onChange={this.dateSearch.bind(this)}
+						// onChange={this.dateSearch.bind(this)}
 					/>
 					<InputNumber onChange={this.setInputId.bind(this)} style={{ marginRight: 10 }}/>
 					{/* <Input onChange={value =>this.setInputId(value)} style={{ marginRight: 10 ,width:120 }}/> */}
@@ -162,7 +180,7 @@ class expendsManager extends Component {
 					rowSelection={rowSelection}
 					pagination={pagination}
 					dataSource={this.props.list}
-					rowKey="expandID"
+					rowKey="productID"
 					loading={this.props.loading}
 					bordered
 					onChange={this.tableChange.bind(this)} />
@@ -171,12 +189,12 @@ class expendsManager extends Component {
 	}
 };
 
-export default connect(({ expendsManager }) => {
+export default connect(({ shopItem }) => {
 	return {
-		list: expendsManager.list,
-		loading: expendsManager.loading,
-		total: expendsManager.total,
-		selectedRowKeys: expendsManager.selectedRowKeys,
-		pagination: expendsManager.pagination
+		list: shopItem.list,
+		loading: shopItem.loading,
+		total: shopItem.total,
+		selectedRowKeys: shopItem.selectedRowKeys,
+		pagination: shopItem.pagination
 	}
-})(expendsManager);
+})(shopItem);

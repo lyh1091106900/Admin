@@ -1,3 +1,5 @@
+// import Upload from 'antd/lib/upload/Upload';
+
 'use strict';
 
 const fs = require('fs');
@@ -8,27 +10,37 @@ module.exports = function* () {
   const stream = yield this.getFileStream();
   const saveFileName = new Date().getTime() + stream.filename;
   let filepath = path.join(this.app.config.baseDir, `app/public/uploads/${saveFileName}`);
-  if (stream.fields.title === 'mock-error') {
-    filepath = path.join(this.app.config.baseDir, `app/public/uploads/not-exists/dir/${saveFileName}`);
-  } else if (stream.fields.title === 'mock-read-error') {
-    filepath = path.join(this.app.config.baseDir, `app/public/uploads/read-error-${saveFileName}`);
-  }
-  this.logger.warn('Saving %s to %s', stream.filename, filepath);
+ // console.log('Upload1',filepath,stream);
   try {
-    yield saveStream(stream, filepath);
-  } catch (err) {
-    yield sendToWormhole(stream);
-    throw err;
-  }
+      yield saveStream(stream, filepath);
+    
+    } catch (err) {
+      yield sendToWormhole(stream);
+      throw err;
+    }
+  // if (stream.fields.title === 'mock-error') {
+  //   filepath = path.join(this.app.config.baseDir, `app/public/uploads/not-exists/dir/${saveFileName}`);
+  // } else if (stream.fields.title === 'mock-read-error') {
+  //   filepath = path.join(this.app.config.baseDir, `app/public/uploads/read-error-${saveFileName}`);
+  // }
+  // this.logger.warn('Saving %s to %s', stream.filename, filepath);
+  // try {
+  //   yield saveStream(stream, filepath);
+  // } catch (err) {
+  //   yield sendToWormhole(stream);
+  //   throw err;
+  // }
 
-  this.body = {
-    file: saveFileName,
-    fields: stream.fields,
-  };
+  // this.body = {
+  //   file: saveFileName,
+  //   fields: stream.fields,
+  // };
+  this.body = 'upload';
 };
 
 function saveStream(stream, filepath) {
   return new Promise((resolve, reject) => {
+    console.log('saveStream',filepath);
     if (filepath.indexOf('/read-error-') > 0) {
       stream.once('readable', () => {
         const buf = stream.read(10240);
@@ -38,6 +50,7 @@ function saveStream(stream, filepath) {
         }, 1000);
       });
     } else {
+      console.log('saveStream1',filepath);
       const ws = fs.createWriteStream(filepath);
       stream.pipe(ws);
       ws.on('error', reject);

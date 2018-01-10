@@ -26,6 +26,20 @@ module.exports = app => {
       };
       return result;
     }
+     
+    * getColumns(tableName ,column) {
+      const queryStr = `desc ${tableName};`;
+      let record =  yield this.app.mysql.query(queryStr, '');
+      let result = '';
+      for (var i = record.length - 1; i >= 0; i--) {
+          result = record[i]['Field']; 
+          if(column==result){
+            return column;
+          }
+      };
+      return false;
+    }
+
     * create(request) {
       //建立新表
       const tableName = request.tableName;

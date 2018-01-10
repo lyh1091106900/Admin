@@ -54,7 +54,7 @@ module.exports = [
        // clickable: false
       },
       {
-        key: 'gamesQuery',
+        key: 'gamesDetailQuery',
         name: '查看局数',
         icon: 'code-o',
        // isMenuTab: false,
@@ -95,9 +95,17 @@ module.exports = [
        // isMenuTab: false,
        // clickable: false
       },
+      
       {
         key: 'blacklist',
         name: '黑名单',
+        icon: 'code-o',
+       // isMenuTab: false,
+       // clickable: false
+      },
+      {
+        key: 'shopItem',
+        name: '商城商品',
         icon: 'code-o',
        // isMenuTab: false,
        // clickable: false

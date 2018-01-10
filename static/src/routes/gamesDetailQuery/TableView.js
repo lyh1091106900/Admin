@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { Input, Form, Button, Upload, Icon, message, DatePicker, Switch } from 'antd';
+import { Input, Form, Button, Upload, Icon, message, DatePicker,Switch } from 'antd';
 import moment from 'moment';
-import Avatar from './uploadImage'
+
 import config from '../../utils/config';
 
 const FormItem = Form.Item;
@@ -17,35 +17,32 @@ class TableView extends Component {
 		status: 1,
 		time: '',
 	}
-    imageUrl='http://127.0.0.1:7001/public/uploads/1515566462404detail1.jpg';
+
 	onSubmit(e) {
 		e.preventDefault();
 
 		this.props.form.validateFields((err, values) => {
 			if (err) {
-				return;
+				return ;
 			}
-			values.time = Date.parse(new Date()) / 1000;
-			console.log('playerformsubmit', values);
-			//this.props.onSubmit(values);
+			values.time = Date.parse(new Date())/1000;
+			console.log('playerformsubmit',values);
+			this.props.onSubmit(values);
 		})
 	}
 
 	goBack() {
 		this.context.router.goBack();
 	}
-	setImageUrl(value){
-       
-	}
 
 	render() {
 		const { getFieldDecorator } = this.props.form;
 
 		const formItemLayout = {
-			labelCol: { span: 3 },
-			wrapperCol: { span: 12 }
+			labelCol: { span: 3},
+			wrapperCol: { span: 12}
 		}
-		
+
 		return (
 			<div className="content-inner">
 				<div style={{ borderBottom: '1px solid #ddd', marginBottom: 20, paddingBottom: 10 }}>
@@ -61,7 +58,7 @@ class TableView extends Component {
 								rules: [{
 									required: true, message: '请输入名称',
 								}]
-							})(<Input placeholder="请输入名称" />)
+							})(<Input placeholder="请输入名称"  />)
 						}
 					</FormItem>
 					<FormItem {...formItemLayout} label="链接">
@@ -71,7 +68,7 @@ class TableView extends Component {
 								rules: [{
 									required: true, message: '请输入链接'
 								}]
-							})(<Input placeholder="请输入链接" />)
+							})(<Input placeholder="请输入链接" />)						
 						}
 					</FormItem>
 					<FormItem {...formItemLayout} label="排序">
@@ -81,7 +78,7 @@ class TableView extends Component {
 								rules: [{
 									required: true, message: '请输入序号'
 								}]
-							})(<Input placeholder="请输入序号" />)
+							})(<Input placeholder="请输入序号" />)						
 						}
 					</FormItem>
 					<FormItem {...formItemLayout} label="状态">
@@ -89,7 +86,7 @@ class TableView extends Component {
 							getFieldDecorator('status', {
 								valuePropName: 'checked',
 								initialValue: !!this.props.status,
-							})(<Switch checkedChildren={'开'} unCheckedChildren={'关'} />)
+							})(<Switch checkedChildren={'开'} unCheckedChildren={'关'}/>)						
 						}
 					</FormItem>
 					<FormItem {...formItemLayout} label="uid">
@@ -101,11 +98,6 @@ class TableView extends Component {
 								}]
 							})(<Input type="textarea" />)
 						}
-					</FormItem>
-					<FormItem
-						{...formItemLayout}
-						label="UploadPicture1"	>
-							<Avatar imageUrl={this.imageUrl}  />
 					</FormItem>
 
 				</Form>

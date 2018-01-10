@@ -129,6 +129,48 @@ const Routers = function ({ history, app }) {
                 }, 'expendsManager')
               },
             },
+            {
+              path: 'gamesDetailQuery',
+              name: 'gamesDetailQuery',
+              getComponent(nextState, cb) {
+                require.ensure([], require => {
+                  registerModel(app, require('./models/gamesDetailQuery'));
+                  cb(null, require('./routes/gamesDetailQuery/'))
+                }, 'gamesDetailQuery')
+              },
+            },
+            {
+              path: 'shopItem',
+              name: 'shopItem',
+              getComponent(nextState, cb) {
+                require.ensure([], require => {
+                  registerModel(app, require('./models/shopItem'));
+                  cb(null, require('./routes/shopItem'))
+                }, 'shopItem')
+              },
+              childRoutes:[
+                {
+                  path: 'create',
+                  name: 'shopItemCreate',
+                  getComponent(nextState, cb) {
+                    require.ensure([], require => {
+                      registerModel(app, require('./models/playerForm'));
+                      cb(null, require('./routes/playerQuery/playerForm'))
+                    }, 'playerQuery')
+                  }
+                },
+                {
+                  path: 'edit/:tid',
+                  name: 'shopItemEdit',
+                  getComponent(nextState, cb) {
+                    require.ensure([], require => {
+                      registerModel(app, require('./models/playerForm'));
+                      cb(null, require('./routes/playerQuery/playerForm'))
+                    }, 'playerQuery')
+                  }
+                },
+              ]
+            },
           ]
         }
       ],
