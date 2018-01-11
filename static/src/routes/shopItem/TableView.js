@@ -143,12 +143,12 @@ class TableView extends Component {
 						<FormItem
 							{...formItemLayout}
 							label="UploadPicture1"	>
-							<Avatar imageUrl={ this.props.picture_En} actionUrl="//127.0.0.1:7001/api/upload"/>
+							<Avatar imageUrl={ this.props.picture_En} actionUrl={"//127.0.0.1:7001/api/upload1/" + this.props.productID} />
 						</FormItem>
 						<FormItem
 							{...formItemLayout}
 							label="UploadPicture1"	>
-							<Avatar imageUrl={ this.props.picture_Km} actionUrl="//127.0.0.1:7001/api/upload"/>
+							<Avatar imageUrl={ this.props.picture_Km} actionUrl={"//127.0.0.1:7001/api/upload2/" + this.props.productID}/>
 						</FormItem>
 						</div>
 						 : null

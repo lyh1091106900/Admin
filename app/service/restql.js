@@ -73,6 +73,7 @@ module.exports = app => {
       return record;
     }
     * update(modal, id, request) {
+      console.log('update',request);
       const modalId = yield this.service.tableinfo.primaryKey(modal);
       let upstr = `update ${modal} set `;
       let upEscape = [];

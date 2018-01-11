@@ -6,11 +6,12 @@ const fs = require('fs');
 const path = require('path');
 const sendToWormhole = require('stream-wormhole');
 
-module.exports = function* () {
+exports.index = function* () {
+  
   const stream = yield this.getFileStream();
   const saveFileName = new Date().getTime() + stream.filename;
   let filepath = path.join(this.app.config.baseDir, `app/public/uploads/${saveFileName}`);
- // console.log('Upload1',filepath,stream);
+  console.log('Upload1',this.params.id);
   try {
       yield saveStream(stream, filepath);
     
@@ -37,6 +38,43 @@ module.exports = function* () {
   // };
   this.body = 'upload';
 };
+
+exports.indexUpShopItmeEn = function* () {
+  
+  const stream = yield this.getFileStream();
+  const saveFileName = new Date().getTime() + stream.filename;
+  let filepath = path.join(this.app.config.baseDir, `app/public/uploads/${saveFileName}`);
+  let option ={ picture_En : saveFileName}
+  console.log('Upload12',option);
+  try {
+      yield saveStream(stream, filepath);
+      yield this.service.restql.update('t_shop_item',this.params.id,option)
+    } catch (err) {
+      yield sendToWormhole(stream);
+      throw err;
+    }
+ 
+  this.body = 'upload';
+};
+
+exports.indexUpShopItmeKm = function* () {
+  
+  const stream = yield this.getFileStream();
+  const saveFileName = new Date().getTime() + stream.filename;
+  let filepath = path.join(this.app.config.baseDir, `app/public/uploads/${saveFileName}`);
+  let option ={ picture_Km : saveFileName}
+  console.log('Upload13',option);
+  try {
+      yield saveStream(stream, filepath);
+      yield this.service.restql.update('t_shop_item',this.params.id,option)
+    } catch (err) {
+      yield sendToWormhole(stream);
+      throw err;
+    }
+ 
+  this.body = 'upload';
+};
+
 
 function saveStream(stream, filepath) {
   return new Promise((resolve, reject) => {
