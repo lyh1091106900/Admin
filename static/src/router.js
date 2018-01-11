@@ -15,7 +15,7 @@ const Routers = function ({ history, app }) {
     {
       path: '/',
       component: App,
-      getIndexRoute (nextState, cb) {
+      getIndexRoute(nextState, cb) {
         require.ensure([], require => {
           registerModel(app, require('./models/tableManager'))
           cb(null, { component: require('./routes/tableManager/') })
@@ -25,20 +25,20 @@ const Routers = function ({ history, app }) {
         {
           path: 'showApi/info',
           name: 'showApi/info',
-          getIndexRoute (nextState, cb) {
+          getIndexRoute(nextState, cb) {
             require.ensure([], require => {
               registerModel(app, require('./models/showApi'))
-              cb(null, { component:require('./routes/showApi/')})
+              cb(null, { component: require('./routes/showApi/') })
             }, 'showApi')
           },
         },
         {
           path: 'tableManager',
           name: 'tableManager',
-          getIndexRoute (nextState, cb) {
+          getIndexRoute(nextState, cb) {
             require.ensure([], require => {
               registerModel(app, require('./models/tableManager'))
-              cb(null,  { component:require('./routes/tableManager/')} )
+              cb(null, { component: require('./routes/tableManager/') })
             }, 'tableManager')
           },
 
@@ -67,13 +67,13 @@ const Routers = function ({ history, app }) {
             }
           ]
         },
-        {   
+        {
           path: 'CambodiaChress',
           name: 'CambodiaChress',
-          getIndexRoute (nextState, cb) {
+          getIndexRoute(nextState, cb) {
             require.ensure([], require => {
               registerModel(app, require('./models/tableManager'))
-                  cb(null,{ component:require('./routes/tableManager/')})
+              cb(null, { component: require('./routes/tableManager/') })
             }, 'playerQuery')
           },
           childRoutes: [
@@ -83,32 +83,32 @@ const Routers = function ({ history, app }) {
               getIndexRoute(nextState, cb) {
                 require.ensure([], require => {
                   registerModel(app, require('./models/playerQuery'))
-                  cb(null, { component:require('./routes/playerQuery/')})
+                  cb(null, { component: require('./routes/playerQuery/') })
                 }, 'playerQuery')
               },
-            childRoutes:[
-              {
-                path: 'create',
-                name: 'playerQueryCreate',
-                getComponent(nextState, cb) {
-                  require.ensure([], require => {
-                    registerModel(app, require('./models/playerForm'));
-                    cb(null, require('./routes/playerQuery/playerForm'))
-                  }, 'playerQuery')
-                }
-              },
-              {
-                path: 'edit/:tid',
-                name: 'playerQueryEdit',
-                getComponent(nextState, cb) {
-                  require.ensure([], require => {
-                    registerModel(app, require('./models/playerForm'));
-                    cb(null, require('./routes/playerQuery/playerForm'))
-                  }, 'playerQuery')
-                }
-              },
-            ]
-            },  
+              childRoutes: [
+                {
+                  path: 'create',
+                  name: 'playerQueryCreate',
+                  getComponent(nextState, cb) {
+                    require.ensure([], require => {
+                      registerModel(app, require('./models/playerForm'));
+                      cb(null, require('./routes/playerQuery/playerForm'))
+                    }, 'playerQuery')
+                  }
+                },
+                {
+                  path: 'edit/:tid',
+                  name: 'playerQueryEdit',
+                  getComponent(nextState, cb) {
+                    require.ensure([], require => {
+                      registerModel(app, require('./models/playerForm'));
+                      cb(null, require('./routes/playerQuery/playerForm'))
+                    }, 'playerQuery')
+                  }
+                },
+              ]
+            },
             {
               path: 'playerPaysInfo',
               name: 'playerPaysInfo',
@@ -118,7 +118,7 @@ const Routers = function ({ history, app }) {
                   cb(null, require('./routes/playerPaysInfo/'))
                 }, 'playerPaysInfo')
               },
-             },
+            },
             {
               path: 'expendsManager',
               name: 'expendsManager',
@@ -142,31 +142,31 @@ const Routers = function ({ history, app }) {
             {
               path: 'shopItem',
               name: 'shopItem',
-              getComponent(nextState, cb) {
+              getIndexRoute(nextState, cb) {
                 require.ensure([], require => {
                   registerModel(app, require('./models/shopItem'));
-                  cb(null, require('./routes/shopItem'))
+                  cb(null, { component: require('./routes/shopItem') })
                 }, 'shopItem')
               },
-              childRoutes:[
+              childRoutes: [
                 {
                   path: 'create',
                   name: 'shopItemCreate',
                   getComponent(nextState, cb) {
                     require.ensure([], require => {
-                      registerModel(app, require('./models/playerForm'));
-                      cb(null, require('./routes/playerQuery/playerForm'))
-                    }, 'playerQuery')
+                      registerModel(app, require('./models/shopItemForm'));
+                      cb(null, require('./routes/shopItem/shopItemForm'))
+                    }, 'shopItem')
                   }
                 },
                 {
-                  path: 'edit/:tid',
+                  path: 'edit/:productID',
                   name: 'shopItemEdit',
                   getComponent(nextState, cb) {
                     require.ensure([], require => {
-                      registerModel(app, require('./models/playerForm'));
-                      cb(null, require('./routes/playerQuery/playerForm'))
-                    }, 'playerQuery')
+                      registerModel(app, require('./models/shopItemForm'));
+                      cb(null, require('./routes/shopItem/shopItemForm'))
+                    }, 'shopItem')
                   }
                 },
               ]

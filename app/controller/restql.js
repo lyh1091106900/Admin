@@ -2,12 +2,13 @@
 var tableSearchInfo = {
   web_newstype: ['tid'],
   t_player_game_detail : ['userid'],
+  t_shop_item : ['productID'],
 }
 exports.index = function* () {
   const response = { success: false, message: '操作失败', }
   var res = this.params.res;
   const tableList = yield this.service.tableinfo.index();
-  //console.log('query0',this.query,this.query['tid']);
+  console.log('query0',this.query,this.query['productID'],res);
   if (res && this.helper.inarray(tableList, res)) {
     var condition={};
    
@@ -18,13 +19,13 @@ exports.index = function* () {
    
     if(searchInfo)
     for (var i = 0; i < searchInfo.length; i++) {
-      console.log('query1',this.query[searchInfo[i]],condition[searchInfo[i]]);
+   //   console.log('query1',this.query[searchInfo[i]],condition[searchInfo[i]]);
       //console.log(this.query[searchInfo[i]]);
       if (this.query[searchInfo[i]]) {
         condition[searchInfo[i]]=this.query[searchInfo[i]]
       }
     }
-    console.log('query2',this.query,this.query['tid']);
+   console.log('query2',condition);
     let result;
     if(res=='t_player_game_detail'){
        result = yield this.service.restql.indexGameDetail(res, this.query, condition);

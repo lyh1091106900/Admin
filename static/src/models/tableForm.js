@@ -29,7 +29,7 @@ export default {
 			let data = null,tableData=null;
 			const callback = payload.callback;
 			delete payload.callback;
-			//	console.log("payload",payload);
+			console.log("payload",payload);
 			const params = {
 				template: payload.template || "",
 				template_name: payload.template_name,

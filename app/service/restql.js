@@ -3,7 +3,7 @@ module.exports = app => {
     * index(modal, query, condition = {}) {
       // console.log('select',this.app.mysql.select);
        const offset = (parseInt(query.page) - 1) * parseInt(query.pageSize);
-      console.log(condition)
+    //  console.log(condition)
       let conditionstr = "",conditionstrtotal="";
       if (JSON.stringify(condition) != "{}") {
         conditionstr = " where ";
@@ -34,7 +34,7 @@ module.exports = app => {
     * indexGameDetail(modal, query, condition = {}) {
       // console.log('select',this.app.mysql.select);
        const offset = (parseInt(query.page) - 1) * parseInt(query.pageSize);
-      console.log(condition)
+     // console.log(condition)
       let conditionstr = "",conditionstrtotal="";
       if (JSON.stringify(condition) != "{}") {
         conditionstr = " where ";
@@ -57,7 +57,7 @@ module.exports = app => {
       // console.log(conditionstrtotal,1111)
       let sql = 'select * from ' + modal + conditionstr;
       let totalsql = 'select count(*) as total from ' + modal + conditionstrtotal;
-      console.log(sql, totalsql);
+    //  console.log(sql, totalsql);
       const record=yield this.app.mysql.query(sql);
       const totalRecord = yield this.app.mysql.query(totalsql);
       return { record, totalRecord: totalRecord[0].total };
@@ -67,9 +67,9 @@ module.exports = app => {
       const modalId = yield this.service.tableinfo.primaryKey(modal);
       let condition = {};
       condition[modalId] = params.id;
-      console.log(modal, condition);
+    //  console.log(modal, condition);
       let record = yield this.app.mysql.get(modal, condition);
-      console.log(record);
+    //  console.log(record);
       return record;
     }
     * update(modal, id, request) {
@@ -83,7 +83,7 @@ module.exports = app => {
       }
       upstr += ` where ${modalId} = ?`;
       upEscape.push(id);
-      console.log('update', upstr, upEscape)
+     // console.log('update', upstr, upEscape)
       let result = yield app.mysql.query(upstr, upEscape);
       return result;
     }

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Upload, Icon, message } from 'antd';
 import 'antd/dist/antd.css';
 import './index.css';
+import config from '../../utils/config';
 function getBase64(img, callback) {
 	const reader = new FileReader();
 	reader.addEventListener('load', () => callback(reader.result));
@@ -52,7 +53,7 @@ class Avatar extends React.Component {
 			</div>
 		);
 		//console.log('render',this.state.imageUrl);
-		const imageUrl = this.state.imageUrl ? this.state.imageUrl : this.props.imageUrl;//上传后直接改变state的值
+		const imageUrl = this.state.imageUrl ? this.state.imageUrl : this.props.imageUrl? config.attachmentURL+'/' +this.props.imageUrl:null;//上传后直接改变state的值
 		//console.log('render',this.state.imageUrl,this.props.imageUrl);
 		return (
 			<Upload
@@ -60,7 +61,7 @@ class Avatar extends React.Component {
 				listType="picture-card"
 				className="avatar-uploader"
 				showUploadList={false}
-				action="//127.0.0.1:7001/api/upload"
+				action= {this.props.actionUrl}
 				beforeUpload={beforeUpload}
 				onChange={this.handleChange}
 			>

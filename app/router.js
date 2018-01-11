@@ -4,6 +4,8 @@
 module.exports = app => {
   app.get('/', 'client.index');
   app.post('/api/upload', 'uploadfile');
+  app.post('/api/upload1', 'uploadfile');
+  app.post('/api/upload1', 'uploadfile');
 
   app.get('/api/restql/:res','restql.index');
   app.get('/api/restql/:res/:id','restql.show');

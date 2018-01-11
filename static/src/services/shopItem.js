@@ -20,8 +20,8 @@ export async function remove(params) {
 };
 
 export function update(params) {
-	const id = params.id;
-	delete params.id;
+	const id = params.productID;
+	delete params.productID;
 
 	return request({
 		url: `/api/restql/t_shop_item/${id}`,

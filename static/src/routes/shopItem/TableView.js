@@ -11,13 +11,18 @@ class TableView extends Component {
 	}
 
 	static defaultProps = {
-		template: '',
-		cont: '',
-		template_name: '',
-		status: 1,
-		time: '',
+		productID: '',
+		name_En: '',
+		name_Km: '',
+		introduce_En :'',
+		introduce_Km : '',
+		use_flag : 0 ,
+		hot_flag : 0 ,
+		picture_En : '',
+		picture_Km : '',
+		price : '',
+		
 	}
-    imageUrl='http://127.0.0.1:7001/public/uploads/1515566462404detail1.jpg';
 	onSubmit(e) {
 		e.preventDefault();
 
@@ -26,16 +31,19 @@ class TableView extends Component {
 				return;
 			}
 			values.time = Date.parse(new Date()) / 1000;
-			console.log('playerformsubmit', values);
-			//this.props.onSubmit(values);
+			values.use_flag=values.use_flag ? 0 : 1;
+			values.hot_flag=values.hot_flag ? 0 : 1;
+			values.isCreate=this.props.productID ==''?true:false; 
+			console.log('shopItemForm', values);
+			this.props.onSubmit(values);
 		})
 	}
 
 	goBack() {
 		this.context.router.goBack();
 	}
-	setImageUrl(value){
-       
+	setImageUrl(value) {
+
 	}
 
 	render() {
@@ -45,7 +53,7 @@ class TableView extends Component {
 			labelCol: { span: 3 },
 			wrapperCol: { span: 12 }
 		}
-		
+
 		return (
 			<div className="content-inner">
 				<div style={{ borderBottom: '1px solid #ddd', marginBottom: 20, paddingBottom: 10 }}>
@@ -54,59 +62,97 @@ class TableView extends Component {
 				</div>
 
 				<Form>
-					<FormItem {...formItemLayout} label="名称">
+					<FormItem {...formItemLayout} label="商品ID">
 						{
-							getFieldDecorator('name', {
-								initialValue: this.props.name,
+							getFieldDecorator('productID', {
+								initialValue: this.props.productID,
+								rules: [{
+									required: true, message: '请输入商品ID',
+								}]
+							})(<Input placeholder="请输入商品ID" disabled={this.props.productID !=''? true :false }/>)
+						}
+					</FormItem>
+					<FormItem {...formItemLayout} label="英文名称">
+						{
+							getFieldDecorator('name_En', {
+								initialValue: this.props.name_En,
 								rules: [{
 									required: true, message: '请输入名称',
 								}]
 							})(<Input placeholder="请输入名称" />)
 						}
 					</FormItem>
-					<FormItem {...formItemLayout} label="链接">
+					<FormItem {...formItemLayout} label="柬埔寨文名称">
 						{
-							getFieldDecorator('link', {
-								initialValue: this.props.link,
+							getFieldDecorator('name_Km', {
+								initialValue: this.props.name_Km,
 								rules: [{
-									required: true, message: '请输入链接'
+									required: true, message: '请输入柬埔寨名称',
 								}]
-							})(<Input placeholder="请输入链接" />)
+							})(<Input placeholder="请输入柬埔寨名称" />)
 						}
 					</FormItem>
-					<FormItem {...formItemLayout} label="排序">
+					<FormItem {...formItemLayout} label="英文介绍">
 						{
-							getFieldDecorator('ord', {
-								initialValue: this.props.ord,
+							getFieldDecorator('introduce_En', {
+								initialValue: this.props.introduce_En,
 								rules: [{
-									required: true, message: '请输入序号'
+									required: true, message: '请输入英文介绍'
 								}]
-							})(<Input placeholder="请输入序号" />)
+							})(<Input placeholder="请输入英文介绍" />)
 						}
 					</FormItem>
-					<FormItem {...formItemLayout} label="状态">
+					<FormItem {...formItemLayout} label="柬埔寨文介绍">
 						{
-							getFieldDecorator('status', {
+							getFieldDecorator('introduce_Km', {
+								initialValue: this.props.introduce_Km,
+								rules: [{
+									required: true, message: '请输入柬埔寨文介绍'
+								}]
+							})(<Input placeholder="请输入柬埔寨文介绍" />)
+						}
+					</FormItem>
+					<FormItem {...formItemLayout} label="使用标志位">
+						{
+							getFieldDecorator('use_flag', {
 								valuePropName: 'checked',
-								initialValue: !!this.props.status,
+								initialValue: !!!this.props.use_flag,
 							})(<Switch checkedChildren={'开'} unCheckedChildren={'关'} />)
 						}
 					</FormItem>
-					<FormItem {...formItemLayout} label="uid">
+					<FormItem {...formItemLayout} label="hot标志位">
 						{
-							getFieldDecorator('uid', {
-								initialValue: this.props.uid,
-								rules: [{
-									required: true, message: '请输入uid'
-								}]
-							})(<Input type="textarea" />)
+							getFieldDecorator('hot_flag', {
+								valuePropName: 'checked',
+								initialValue: !!!this.props.hot_flag,
+							})(<Switch checkedChildren={'开'} unCheckedChildren={'关'} />)
 						}
 					</FormItem>
-					<FormItem
-						{...formItemLayout}
-						label="UploadPicture1"	>
-							<Avatar imageUrl={this.imageUrl}  />
+					<FormItem {...formItemLayout} label="价格">
+						{
+							getFieldDecorator('price', {
+								initialValue: this.props.price,
+								rules: [{
+									required: true, message: '请输入价格'
+								}]
+							})(<Input placeholder="请输入价格" />)
+						}
 					</FormItem>
+					{ this.props.productID != '' ?
+					<div>
+						<FormItem
+							{...formItemLayout}
+							label="UploadPicture1"	>
+							<Avatar imageUrl={ this.props.picture_En} actionUrl="//127.0.0.1:7001/api/upload"/>
+						</FormItem>
+						<FormItem
+							{...formItemLayout}
+							label="UploadPicture1"	>
+							<Avatar imageUrl={ this.props.picture_Km} actionUrl="//127.0.0.1:7001/api/upload"/>
+						</FormItem>
+						</div>
+						 : null
+					}
 
 				</Form>
 			</div>

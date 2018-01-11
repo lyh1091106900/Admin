@@ -54,7 +54,7 @@ export default {
     },
 
     *updateShopItem({ payload }, { call, put }) {
-      console.log('updateShopItem')
+      console.log('updateShopItem',payload)
       yield put({ type: 'showLoading' });
       const page = payload.page;
       const pageSize = payload.pageSize;

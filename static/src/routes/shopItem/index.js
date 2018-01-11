@@ -2,8 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'dva';
 import { Table, Button, Modal, Switch, DatePicker, Input, InputNumber } from 'antd';
 import moment, { localeData } from 'moment';
+import config from '../../utils/config'
 
-var gstartTime, gendTime, gtid;
+var gstartTime, gendTime, gproductID;
 const { MonthPicker, RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const columns = [
@@ -22,6 +23,7 @@ const columns = [
 	{ title: '操作', width: 150 },
 
 ];
+
 
 const linkStyle = {
 	display: 'inline-block',
@@ -43,21 +45,36 @@ class shopItem extends Component {
 				<span onClick={this.toShopItemForm.bind(this, record.productID)} style={linkStyle}>编辑</span>
 			</div>)
 		}
-		// columns[len - 2].render = (text, record) => {
-		// 	return <Switch checked={!!text} onChange={this.changeplayerQueryState.bind(this, record)} checkedChildren={'开'} unCheckedChildren={'关'} />
-		// }
-		// columns[len - 3].render = (text, record) => {
-		// 	var time = new Date(record.time * 1000)
-		// 	return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
-		// }
+		columns[len - 4].render = (text, record) => {
+			
+			return <img src={config.attachmentURL+'/'+record.picture_En} width='120' height='97' />
+		}
+		columns[len - 3].render = (text, record) => {
+		
+			return <img src={config.attachmentURL+'/'+record.picture_Km} width='120' height='97' />
+		}
+		columns[len - 5].render = (text, record) => {	
+			let time = new Date(record.modify_time)
+			return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
+		}
+		columns[len - 6].render = (text, record) => {
+			let time = new Date(record.creat_time)
+			return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
+		}
+		columns[len -7].render = (text,record) => {
+			return <Switch checked={!!!text} onChange={this.changeShopItemFormHotState.bind(this, record)} checkedChildren={'开'} unCheckedChildren={'关'}/>
+		} 
+		columns[len -8].render = (text,record) => {
+			return <Switch checked={!!!text} onChange={this.changeShopItemFormUseState.bind(this, record)} checkedChildren={'开'} unCheckedChildren={'关'}/>
+		} 
 	}
 
 	componentDidMount() {
 		this.loadTableData();
 	}
 
-	loadTableData(page = 1, pageSize = 10, startTime, endTime, tid) {
-		this.props.dispatch({ type: 'shopItem/loadShopItem', payload: { page, pageSize, startTime, endTime, tid } });
+	loadTableData(page = 1, pageSize = 10, startTime, endTime, productID) {
+		this.props.dispatch({ type: 'shopItem/loadShopItem', payload: { page, pageSize, startTime, endTime, productID:JSON.stringify(productID) } });
 	}
 
 	tableChange(pagination) {
@@ -74,19 +91,31 @@ class shopItem extends Component {
 
 	toShopItemForm(productID) {
 		if (productID) {
-			this.context.router.push({ pathname: `/CambodiaChress/playerQuery/edit/${productID}` });
+			this.context.router.push({ pathname: `/CambodiaChress/shopItem/edit/${productID}` });
 		} else {
-			this.context.router.push({ pathname: '/CambodiaChress/playerQuery/create' });
+			this.context.router.push({ pathname: '/CambodiaChress/shopItem/create' });
 		}
 	}
 
-	changeplayerQueryState(record) {
-		console.log("switchChange", record);
-		const status = record.status ? 0 : 1;
+	changeShopItemFormHotState(record) {
+		//console.log("switchChangeHot", record);
+		const hot_flag = record.hot_flag ? 0 : 1;
 		this.props.dispatch({
-			type: 'shopItem/loadShopItem', payload: {
+			type: 'shopItem/updateShopItem', payload: {
 				...record,
-				status,
+				hot_flag,
+				page: this.props.pagination.current,
+				pageSize: this.props.pagination.pageSize
+			}
+		});
+	}
+	changeShopItemFormUseState(record) {
+		console.log("switchChangeUse", record);
+		const use_flag = record.use_flag ? 0 : 1;
+		this.props.dispatch({
+			type: 'shopItem/updateShopItem', payload: {
+				...record,
+				use_flag,
 				page: this.props.pagination.current,
 				pageSize: this.props.pagination.pageSize
 			}
@@ -139,15 +168,15 @@ class shopItem extends Component {
 	}
 
 	setInputId(e) {
-		//   const {value}=e.target;
+		  const {value}=e.target;
 		//   console.log('setInputId',value)
-		console.log(e)
-		gtid = e;
+		console.log(value);
+		gproductID = value;
 	}
 
 	Search() {
 
-		this.loadTableData(1, 10, gstartTime, gendTime, gtid)
+		this.loadTableData(1, 10, gstartTime, gendTime, gproductID)
 	}
 	render() {
 		const rowSelection = {
@@ -167,12 +196,7 @@ class shopItem extends Component {
 				<div style={{ paddingBottom: 10, marginBottom: 20, borderBottom: '1px solid #ddd' }}>
 					<Button type="primary" onClick={this.toShopItemForm.bind(this, 0)} style={{ marginRight: 10 }}>新增</Button>
 					<Button type="primary" onClick={this.deleteShopItemForm.bind(this)} style={{ marginRight: 10 }}>删除</Button>
-					<RangePicker style={{ marginRight: 10 }}
-						format={dateFormat}
-						// onChange={this.dateSearch.bind(this)}
-					/>
-					<InputNumber onChange={this.setInputId.bind(this)} style={{ marginRight: 10 }}/>
-					{/* <Input onChange={value =>this.setInputId(value)} style={{ marginRight: 10 ,width:120 }}/> */}
+					<Input onChange={value =>this.setInputId(value)} style={{ marginRight: 10 ,width:120 }}/>
 					<Button type="primary" onClick={this.Search.bind(this)} icon="search">查询</Button>
 				</div>
 

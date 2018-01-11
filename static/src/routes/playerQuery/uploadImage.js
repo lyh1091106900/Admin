@@ -48,10 +48,9 @@ class Avatar extends React.Component {
 		const uploadButton = (
 			<div>
 				<Icon type={this.state.loading ? 'loading' : 'plus'} />
-				<div className="ant-upload-text">Upload</div>
 			</div>
 		);
-		//console.log('render',this.state.imageUrl);
+		//console.log('render',this.state.imageUrl,this.state.loading);
 		const imageUrl = this.state.imageUrl ? this.state.imageUrl : this.props.imageUrl;//上传后直接改变state的值
 		//console.log('render',this.state.imageUrl,this.props.imageUrl);
 		return (
@@ -64,7 +63,7 @@ class Avatar extends React.Component {
 				beforeUpload={beforeUpload}
 				onChange={this.handleChange}
 			>
-				{imageUrl ? <img src={imageUrl} alt="" /> : uploadButton}
+				{imageUrl ? <img src={imageUrl} alt="" /> :uploadButton}
 			</Upload>
 		);
 	}
