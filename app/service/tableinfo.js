@@ -16,7 +16,9 @@ module.exports = app => {
       return record;
     }
     * primaryKey(tableName) {
+      console.log('primary1',tableName)
       const queryStr = `desc ${tableName};`;
+      console.log('primary2',queryStr)
       let record =  yield this.app.mysql.query(queryStr, '');
       let result = '';
       for (var i = record.length - 1; i >= 0; i--) {
@@ -24,6 +26,7 @@ module.exports = app => {
           result = record[i]['Field'];
         }
       };
+      console.log('primary2',queryStr)
       return result;
     }
      

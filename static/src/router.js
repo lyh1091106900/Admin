@@ -120,6 +120,16 @@ const Routers = function ({ history, app }) {
               },
             },
             {
+              path: 'playerExInfo',
+              name: 'playerExInfo',
+              getComponent(nextState, cb) {
+                require.ensure([], require => {
+                  registerModel(app, require('./models/playerExInfo'));
+                  cb(null, require('./routes/playerExInfo/'))
+                }, 'playerExInfo')
+              },
+            },
+            {
               path: 'expendsManager',
               name: 'expendsManager',
               getComponent(nextState, cb) {
@@ -167,6 +177,38 @@ const Routers = function ({ history, app }) {
                       registerModel(app, require('./models/shopItemForm'));
                       cb(null, require('./routes/shopItem/shopItemForm'))
                     }, 'shopItem')
+                  }
+                },
+              ]
+            },
+            {
+              path: 'exchangeItem',
+              name: 'exchangeItem',
+              getIndexRoute(nextState, cb) {
+                require.ensure([], require => {
+                  registerModel(app, require('./models/exchangeItem'));
+                  cb(null, { component: require('./routes/exchangeItem') })
+                }, 'exchangeItem')
+              },
+              childRoutes: [
+                {
+                  path: 'create',
+                  name: 'exchangeItemCreate',
+                  getComponent(nextState, cb) {
+                    require.ensure([], require => {
+                      registerModel(app, require('./models/exchangeItemForm'));
+                      cb(null, require('./routes/exchangeItem/exchangeItemForm'))
+                    }, 'exchangeItem')
+                  }
+                },
+                {
+                  path: 'edit/:exchange_itemID',
+                  name: 'exchangeItemEdit',
+                  getComponent(nextState, cb) {
+                    require.ensure([], require => {
+                      registerModel(app, require('./models/exchangeItemForm'));
+                      cb(null, require('./routes/exchangeItem/exchangeItemForm'))
+                    }, 'exchangeItem')
                   }
                 },
               ]

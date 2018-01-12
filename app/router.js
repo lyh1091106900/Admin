@@ -6,12 +6,16 @@ module.exports = app => {
   app.post('/api/upload/:id', 'uploadfile.index');
   app.post('/api/upload1/:id', 'uploadfile.indexUpShopItmeEn');
   app.post('/api/upload2/:id', 'uploadfile.indexUpShopItmeKm');
+  app.post('/api/upload3/:id', 'uploadfile.indexUpExItmeEn');
+  app.post('/api/upload4/:id', 'uploadfile.indexUpExItmeKm');
 
   app.get('/api/restql/:res','restql.index');
   app.get('/api/restql/:res/:id','restql.show');
   app.post('/api/restql/:res','restql.create');
   app.put('/api/restql/:res/:id','restql.update');
   app.del('/api/restql/:res/:id','restql.destroy');
+  app.get('/api/restqldoubleTbl/:res1/:res2/:joinid','restql.indexDouble');
+  app.put('/api/restqlUpdateExOrderFlag/:res/:ids/:flag/:flag_column','restql.updateExOrderFlag');
 
   app.get('/api/table','tableinfo.index');
   app.get('/api/table/:res','tableinfo.show');

@@ -75,6 +75,42 @@ exports.indexUpShopItmeKm = function* () {
   this.body = 'upload';
 };
 
+exports.indexUpExItmeEn = function* () {
+  
+  const stream = yield this.getFileStream();
+  const saveFileName = new Date().getTime() + stream.filename;
+  let filepath = path.join(this.app.config.baseDir, `app/public/uploads/${saveFileName}`);
+  let option ={ picture_En : saveFileName}
+  console.log('Upload23',option);
+  try {
+      yield saveStream(stream, filepath);
+      yield this.service.restql.update('t_exchange_item',this.params.id,option)
+    } catch (err) {
+      yield sendToWormhole(stream);
+      throw err;
+    }
+ 
+  this.body = 'upload';
+};
+
+exports.indexUpExItmeKm = function* () {
+  
+  const stream = yield this.getFileStream();
+  const saveFileName = new Date().getTime() + stream.filename;
+  let filepath = path.join(this.app.config.baseDir, `app/public/uploads/${saveFileName}`);
+  let option ={ picture_Km : saveFileName}
+  console.log('Upload24',option);
+  try {
+      yield saveStream(stream, filepath);
+      yield this.service.restql.update('t_exchange_item',this.params.id,option)
+    } catch (err) {
+      yield sendToWormhole(stream);
+      throw err;
+    }
+ 
+  this.body = 'upload';
+};
+
 
 function saveStream(stream, filepath) {
   return new Promise((resolve, reject) => {

@@ -75,6 +75,13 @@ module.exports = [
        // clickable: false
       },
       {
+        key: 'playerExInfo',
+        name: '用户兑换统计',
+        icon: 'code-o',
+       // isMenuTab: false,
+       // clickable: false
+      },
+      {
         key: 'gameHistory',
         name: '游戏记录统计',
         icon: 'code-o',
@@ -97,15 +104,15 @@ module.exports = [
       },
       
       {
-        key: 'blacklist',
-        name: '黑名单',
+        key: 'shopItem',
+        name: '商城商品',
         icon: 'code-o',
        // isMenuTab: false,
        // clickable: false
       },
       {
-        key: 'shopItem',
-        name: '商城商品',
+        key: 'exchangeItem',
+        name: '兑换商品',
         icon: 'code-o',
        // isMenuTab: false,
        // clickable: false
