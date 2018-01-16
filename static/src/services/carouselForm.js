@@ -2,8 +2,8 @@ import { request } from '../utils';
 
 export async function loadTable(params) {
 	//console.log(params)
-	const id = params.userid || 0;
-	const url = id ? `/api/restql/t_users/${id}` : '/api/restql/t_users';
+	const id = params.meID || 0;
+	const url = id ? `/api/restql/t_message/${id}` : '/api/restql/t_message';
 
 	return request({
 		url,
@@ -12,15 +12,15 @@ export async function loadTable(params) {
 };
 
 export async function update(params) {
-	const id = params.userid || 0;
+	const id = params.meID || 0;
 	if (!id) {
 		return;
 	}
 
-	delete params.userid;
+	delete params.meID;
 
 	return request({
-		url: `/api/restql/t_users/${id}`,
+		url: `/api/restql/t_message/${id}`,
 		method: 'put',
 		data: params
 	});
@@ -28,7 +28,7 @@ export async function update(params) {
 
 export async function save(params) {
 	return request({
-		url: '/api/restql/t_users',
+		url: '/api/restql/t_message',
 		method: 'post',
 		data: params
 	});

@@ -9,7 +9,7 @@ const Const = {
 	module: 'playerQuery'
 }
 
-class playerForm extends Component {
+class carouselForm extends Component {
 	static contextTypes = {
 		router: PropTypes.object
 	}
@@ -19,18 +19,18 @@ class playerForm extends Component {
 	}
 
 	componentDidMount() {
-		console.log( this.props.params.userid, this.props.params)
-		const id = this.props.params && this.props.params.userid;
+		console.log( this.props.params.meID, this.props.params)
+		const id = this.props.params && this.props.params.meID;
 		const { dispatch } = this.props;
 
 		if (id) {
-			dispatch({ type: 'playerForm/load', payload: { userid:id, ...Const } });
+			dispatch({ type: 'carouselForm/load', payload: { meID:id, ...Const } });
 		}
 	}
 
 	componentWillUnmount() {
 		this.props.dispatch({
-			type: 'playerForm/resetState'
+			type: 'carouselForm/resetState'
 		});
 	}
 
@@ -42,12 +42,18 @@ class playerForm extends Component {
 		const hide = message.loading('正在保存...', 0);
 
 		this.props.dispatch({ 
-			type: 'playerForm/save',
+			type: 'carouselForm/save',
 			payload: {
 				...this.props,
-				name: values.name,
-				gems : values.gems,
-				addGems :values.addGems,
+				headline_En: values.headline_En,
+				headline_Km : values.headline_Km,
+				state_flag :values.state_flag,
+				frequency : values.frequency,
+				cycles_time : values.cycles_time,
+				msg_En : values.msg_En,
+				msg_Km : values.msg_Km,
+				start_time : values.start_time,
+				end_time : values.end_time,
 				...Const,
 				callback: (data) => {
 					hide();
@@ -69,16 +75,22 @@ class playerForm extends Component {
 		console.log('renderplayerForm',props);
 		return (
 			<TableView
-			    name={props.name}
-				userid={props.userid}
-				gems={props.gems}
-				onSubmit={this.onSubmit.bind(this)}/>
+			headline_En={props.headline_En}
+			headline_Km={props.headline_Km}
+			state_flag={props.state_flag}
+			frequency={props.frequency}
+			cycles_time ={props.cycles_time}
+			msg_En ={props.msg_En}
+			msg_Km ={props.msg_Km}
+			start_time ={props.start_time}
+			end_time ={props.end_time}
+			onSubmit={this.onSubmit.bind(this)}/>
 		)
 	}
 }
 
-export default connect(({ playerForm, app }) => {
+export default connect(({ carouselForm, app }) => {
 	return {
-		...playerForm,
+		...carouselForm,
 	}
-})(playerForm);
+})(carouselForm);

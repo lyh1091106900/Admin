@@ -17,7 +17,6 @@ class TableView extends Component {
 		status: 1,
 		time: '',
 	}
-    imageUrl='http://127.0.0.1:7001/public/uploads/1515566462404detail1.jpg';
 	onSubmit(e) {
 		e.preventDefault();
 
@@ -27,15 +26,15 @@ class TableView extends Component {
 			}
 			values.time = Date.parse(new Date()) / 1000;
 			console.log('playerformsubmit', values);
-			//this.props.onSubmit(values);
+			this.props.onSubmit(values);
 		})
 	}
 
 	goBack() {
 		this.context.router.goBack();
 	}
-	setImageUrl(value){
-       
+	setImageUrl(value) {
+
 	}
 
 	render() {
@@ -45,8 +44,9 @@ class TableView extends Component {
 			labelCol: { span: 3 },
 			wrapperCol: { span: 12 }
 		}
-		
+        console.log(this.props)
 		return (
+			
 			<div className="content-inner">
 				<div style={{ borderBottom: '1px solid #ddd', marginBottom: 20, paddingBottom: 10 }}>
 					<Button style={{ marginRight: 10 }} onClick={this.goBack.bind(this)}>返回</Button>
@@ -54,6 +54,16 @@ class TableView extends Component {
 				</div>
 
 				<Form>
+					<FormItem {...formItemLayout} label="用户ID">
+						{
+							getFieldDecorator('userid', {
+								initialValue: this.props.userid,
+								rules: [{
+									required: true, message: '请输入用户ID'
+								}]
+							})(<Input placeholder="请输入用户ID" disabled={true}/>)
+						}
+					</FormItem>
 					<FormItem {...formItemLayout} label="名称">
 						{
 							getFieldDecorator('name', {
@@ -61,53 +71,29 @@ class TableView extends Component {
 								rules: [{
 									required: true, message: '请输入名称',
 								}]
-							})(<Input placeholder="请输入名称" />)
+							})(<Input placeholder="请输入名称" disabled={true} />)
 						}
 					</FormItem>
-					<FormItem {...formItemLayout} label="链接">
+					<FormItem {...formItemLayout} label="当前钻石">
 						{
-							getFieldDecorator('link', {
-								initialValue: this.props.link,
+							getFieldDecorator('gems', {
+								initialValue: this.props.gems,
 								rules: [{
-									required: true, message: '请输入链接'
+									required: true, message: '请输入钻石数量',
 								}]
-							})(<Input placeholder="请输入链接" />)
+							})(<Input placeholder="请输入钻石数量" disabled={true} />)
 						}
 					</FormItem>
-					<FormItem {...formItemLayout} label="排序">
+					<FormItem {...formItemLayout} label="充值金额">
 						{
-							getFieldDecorator('ord', {
-								initialValue: this.props.ord,
+							getFieldDecorator('addGems', {
+								initialValue: 0,
 								rules: [{
-									required: true, message: '请输入序号'
+									required: true, message: '请输入充值金额'
 								}]
-							})(<Input placeholder="请输入序号" />)
+							})(<Input placeholder="请输入充值金额" />)
 						}
 					</FormItem>
-					<FormItem {...formItemLayout} label="状态">
-						{
-							getFieldDecorator('status', {
-								valuePropName: 'checked',
-								initialValue: !!this.props.status,
-							})(<Switch checkedChildren={'开'} unCheckedChildren={'关'} />)
-						}
-					</FormItem>
-					<FormItem {...formItemLayout} label="uid">
-						{
-							getFieldDecorator('uid', {
-								initialValue: this.props.uid,
-								rules: [{
-									required: true, message: '请输入uid'
-								}]
-							})(<Input type="textarea" />)
-						}
-					</FormItem>
-					<FormItem
-						{...formItemLayout}
-						label="UploadPicture1"	>
-							<Avatar imageUrl={this.imageUrl}  />
-					</FormItem>
-
 				</Form>
 			</div>
 		)

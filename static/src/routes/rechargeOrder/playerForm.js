@@ -6,10 +6,10 @@ import { message } from 'antd';
 import { attachmentURL } from '../../utils/config';
 
 const Const = {
-	module: 'tableManager'
+	module: 'playerQuery'
 }
 
-class TableForm extends Component {
+class playerForm extends Component {
 	static contextTypes = {
 		router: PropTypes.object
 	}
@@ -19,17 +19,18 @@ class TableForm extends Component {
 	}
 
 	componentDidMount() {
-		const id = this.props.params && this.props.params.id;
+		console.log( this.props.params.tid, this.props.params)
+		const id = this.props.params && this.props.params.tid;
 		const { dispatch } = this.props;
 
 		if (id) {
-			dispatch({ type: 'tableForm/loadTable', payload: { id, ...Const } });
+			dispatch({ type: 'playerForm/load', payload: { tid:id, ...Const } });
 		}
 	}
 
 	componentWillUnmount() {
 		this.props.dispatch({
-			type: 'tableForm/resetState'
+			type: 'playerForm/resetState'
 		});
 	}
 
@@ -41,14 +42,15 @@ class TableForm extends Component {
 		const hide = message.loading('正在保存...', 0);
 
 		this.props.dispatch({ 
-			type: 'tableForm/saveTable',
+			type: 'playerForm/save',
 			payload: {
 				...this.props,
-				template: values.template,
-				cont: values.cont,
-				template_name: values.template_name,
+				name: values.name,
+				link: values.link,
+				ord: values.ord,
 				status: values.status,
 				time: values.time,
+				uid: values.uid,
 				...Const,
 				callback: (data) => {
 					hide();
@@ -65,26 +67,24 @@ class TableForm extends Component {
 	}
 
 	render() {
+	
 		const props = this.props;
-		console.log(props)
+		console.log('renderplayerForm',props);
 		return (
 			<TableView
-				template={props.template}
-				cont={props.cont}
-				template_name={props.template_name}
+			    name={props.name}
+				link={props.link}
+				ord={props.ord}
 				status={props.status}
-				seotitle={props.seotitle}
+				uid={props.uid}
 				time={props.time}
 				onSubmit={this.onSubmit.bind(this)}/>
 		)
 	}
 }
 
-export default connect(({ tableForm, app }) => {
+export default connect(({ playerForm, app }) => {
 	return {
-		...tableForm,
-		content: tableForm.con,
-		uid: app.user.uid,
-		name: app.user.name
+		...playerForm,
 	}
-})(TableForm);
+})(playerForm);

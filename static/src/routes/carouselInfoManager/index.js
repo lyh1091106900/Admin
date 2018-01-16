@@ -3,23 +3,23 @@ import { connect } from 'dva';
 import { Table, Button, Modal, Switch, DatePicker, Input, InputNumber } from 'antd';
 import moment, { localeData } from 'moment';
 
-var gstartTime, gendTime, guserid;
+var gstartTime, gendTime, gmeID;
 const { MonthPicker, RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const columns = [
-	{ title: '用户ID', dataIndex: 'userid' },
-	{ title: '账号', dataIndex: 'account' },
-	{ title: '昵称', dataIndex: 'name' },
-	{ title: '性别', dataIndex: 'sex' },
-	{ title: '用户等级', dataIndex: 'lv' },
-	{ title: '用户经验', dataIndex: 'exp' },
-	{ title: '用户金币', dataIndex: 'coins' },
-	{ title: '用户存款', dataIndex: 'deposit' },
-	{ title: '用户钻石', dataIndex: 'gems' },
-	{ title: '语言', dataIndex: 'numlangu' },
-	{ title: '黑名单标志', dataIndex: 'black_flag' },
-	{ title: '机器人标志', dataIndex: 'robot_flag' },
-	{ title: '充值', width: 150 },
+	{ title: '活动ID', dataIndex: 'meID' },
+	{ title: '创建时间', dataIndex: 'creat_time' },
+	{ title: '修改时间', dataIndex: 'modify_time' },
+	{ title: '英文标题', dataIndex: 'headline_En' },
+	{ title: '柬埔寨标题', dataIndex: 'headline_Km' },
+	{ title: '状态', dataIndex: 'state_flag' },
+	{ title: '次数', dataIndex: 'frequency' },
+	{ title: '间隔', dataIndex: 'cycles_time' },
+	{ title: '英语内容', dataIndex: 'msg_En' },
+	{ title: '柬埔寨内容', dataIndex: 'msg_Km' },
+	{ title: '开始时间', dataIndex: 'start_time' },
+	{ title: '结束时间', dataIndex: 'end_time' },
+	{ title: '编辑', width: 150 },
 
 ];
 
@@ -29,7 +29,7 @@ const linkStyle = {
 	cursor: 'pointer'
 };
 
-class playerQuery extends Component {
+class carouselInfoManager extends Component {
 	static contextTypes = {
 		router: PropTypes.object
 	}
@@ -40,28 +40,30 @@ class playerQuery extends Component {
 		const len = columns.length;
 		columns[len - 1].render = (text, record, index) => {
 			return (<div>
-				<span onClick={this.toplayerQueryForm.bind(this, record.userid)} style={linkStyle}>充值</span>
+				<span onClick={this.tocarouselInfoForm.bind(this, record.meID)} style={linkStyle}>编辑</span>
 			</div>)
 		}
-		columns[len - 2].render = (text, record) => {
-			return <Switch checked={!!!text} onChange={this.changeplayerQueryRobState.bind(this, record)} checkedChildren={'是'} unCheckedChildren={'否'} />
+	
+		columns[len - 8].render = (text, record) => {
+			return <Switch checked={!!!text} onChange={this.changeCarouselInfoFormState.bind(this, record)} checkedChildren={'开'} unCheckedChildren={'关'} />
 		}
-		columns[len - 3].render = (text, record) => {
-			return <Switch checked={!!!text} onChange={this.changeplayerQueryBlaState.bind(this, record)} checkedChildren={'是'} unCheckedChildren={'否'} />
+		columns[len - 11].render = (text, record) => {
+			var time = new Date(record.modify_time )
+			return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
 		}
-		// columns[len - 3].render = (text, record) => {
-		// 	var time = new Date(record.time * 1000)
-		// 	return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
-		// }
+		columns[len - 12].render = (text, record) => {
+			var time = new Date(record.creat_time )
+			return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
+		}
 	}
 
 	componentDidMount() {
 		this.loadTableData();
 	}
 
-	loadTableData(page = 1, pageSize = 10, startTime, endTime, userid) {
-		console.log(userid);
-		this.props.dispatch({ type: 'playerQuery/loadPlayerQuery', payload: { page, pageSize, startTime, endTime, userid } });
+	loadTableData(page = 1, pageSize = 10, startTime, endTime, meID) {
+		console.log(meID);
+		this.props.dispatch({ type: 'carouselInfoManager/loadCarouselInfo', payload: { page, pageSize, startTime, endTime, meID } });
 	}
 
 	tableChange(pagination) {
@@ -73,43 +75,32 @@ class playerQuery extends Component {
 
 	selectRow(selectedRowKeys) {
 		console.log('selectRow',selectedRowKeys)
-		this.props.dispatch({ type: 'playerQuery/selectedRowKeys', payload: { selectedRowKeys } });
+		this.props.dispatch({ type: 'carouselInfoManager/selectedRowKeys', payload: { selectedRowKeys } });
 	}
 
-	toplayerQueryForm(userid) {
-		if (userid) {
-			this.context.router.push({ pathname: `/CambodiaChress/playerQuery/edit/${userid}` });
+	tocarouselInfoForm(meID) {
+		if (meID) {
+			this.context.router.push({ pathname: `/CambodiaChress/carouselInfoManager/edit/${meID}` });
 		} else {
-			this.context.router.push({ pathname: '/CambodiaChress/playerQuery/create' });
+			this.context.router.push({ pathname: '/CambodiaChress/carouselInfoManager/create' });
 		}
 	}
 
-	changeplayerQueryRobState(record) {
-		console.log("switchChange", record.robot_flag);
-		const robot_flag = record.robot_flag ? 0 : 1;
+	
+	changeCarouselInfoFormState(record) {
+		console.log("switchChange", record.state_flag);
+		const state_flag = record.state_flag ? 0 : 1;
 		this.props.dispatch({
-			type: 'playerQuery/updatePlayerQuery', payload: {
+			type: 'carouselInfoManager/updateCarouselInfo', payload: {
 				...record,
-				robot_flag,
-				page: this.props.pagination.current,
-				pageSize: this.props.pagination.pageSize
-			}
-		});
-	}
-	changeplayerQueryBlaState(record) {
-		console.log("switchChange", record.black_flag);
-		const black_flag = record.black_flag ? 0 : 1;
-		this.props.dispatch({
-			type: 'playerQuery/updatePlayerQuery', payload: {
-				...record,
-				black_flag,
+				state_flag,
 				page: this.props.pagination.current,
 				pageSize: this.props.pagination.pageSize
 			}
 		});
 	}
 
-	deleteplayerQuery() {
+	deletecarouselInfo() {
 
 		if (this.props.selectedRowKeys.length > 0) {
 			Modal.confirm({
@@ -122,7 +113,7 @@ class playerQuery extends Component {
 							templateArr.push(v.template);
 						}
 					});
-					this.props.dispatch({ type: 'playerQuery/removePlayerQuery', payload: { selectedRowKeys: this.props.selectedRowKeys, templateArr } })
+					this.props.dispatch({ type: 'carouselInfoManager/removeCarouselInfo', payload: { selectedRowKeys: this.props.selectedRowKeys, templateArr } })
 				}
 			});
 		} else {
@@ -181,21 +172,22 @@ class playerQuery extends Component {
 		return (
 			<div className="content-inner">
 				<div style={{ paddingBottom: 10, marginBottom: 20, borderBottom: '1px solid #ddd' }}>
-					<Button type="primary" onClick={this.deleteplayerQuery.bind(this)} style={{ marginRight: 10 }}>删除</Button>
+				    <Button type="primary" onClick={this.tocarouselInfoForm.bind(this)} style={{ marginRight: 10 }}>新增</Button>
+					<Button type="primary" onClick={this.deletecarouselInfo.bind(this)} style={{ marginRight: 10 }}>删除</Button>
 					{/* <RangePicker style={{ marginRight: 10 }}
 						format={dateFormat}
 						onChange={this.dateSearch.bind(this)}
 					/> */}
-					<InputNumber onChange={this.setInputId.bind(this)} style={{ marginRight: 10 }}/>
+					{/* <InputNumber onChange={this.setInputId.bind(this)} style={{ marginRight: 10 }}/> */}
 					{/* <Input onChange={value =>this.setInputId(value)} style={{ marginRight: 10 ,width:120 }}/> */}
-					<Button type="primary" onClick={this.Search.bind(this)} icon="search">查询</Button>
+					{/* <Button type="primary" onClick={this.Search.bind(this)} icon="search">查询</Button> */}
 				</div>
 
 				<Table columns={columns}
 					rowSelection={rowSelection}
 					pagination={pagination}
 					dataSource={this.props.list}
-					rowKey="userid"
+					rowKey="meID"
 					loading={this.props.loading}
 					bordered
 					onChange={this.tableChange.bind(this)} />
@@ -204,12 +196,12 @@ class playerQuery extends Component {
 	}
 };
 
-export default connect(({ playerQuery }) => {
+export default connect(({ carouselInfoManager }) => {
 	return {
-		list: playerQuery.list,
-		loading: playerQuery.loading,
-		total: playerQuery.total,
-		selectedRowKeys: playerQuery.selectedRowKeys,
-		pagination: playerQuery.pagination
+		list: carouselInfoManager.list,
+		loading: carouselInfoManager.loading,
+		total: carouselInfoManager.total,
+		selectedRowKeys: carouselInfoManager.selectedRowKeys,
+		pagination: carouselInfoManager.pagination
 	}
-})(playerQuery);
+})(carouselInfoManager);

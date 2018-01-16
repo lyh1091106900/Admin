@@ -8,6 +8,8 @@ module.exports = app => {
   app.post('/api/upload2/:id', 'uploadfile.indexUpShopItmeKm');
   app.post('/api/upload3/:id', 'uploadfile.indexUpExItmeEn');
   app.post('/api/upload4/:id', 'uploadfile.indexUpExItmeKm');
+  app.post('/api/upload5/:id', 'uploadfile.indexUpAcItmeEn');
+  app.post('/api/upload6/:id', 'uploadfile.indexUpAcItmeKm');
 
   app.get('/api/restql/:res','restql.index');
   app.get('/api/restql/:res/:id','restql.show');

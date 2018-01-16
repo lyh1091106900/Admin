@@ -54,6 +54,13 @@ module.exports = [
        // clickable: false
       },
       {
+        key: 'rechargeOrder',
+        name: '后台直冲记录',
+        icon: 'code-o',
+       // isMenuTab: false,
+       // clickable: false
+      },
+      {
         key: 'gamesDetailQuery',
         name: '查看局数',
         icon: 'code-o',
@@ -89,12 +96,13 @@ module.exports = [
        // clickable: false
       },
       {
-        key: 'noticeManager',
-        name: '公告管理',
+        key: 'activityManager',
+        name: '活动管理',
         icon: 'code-o',
        // isMenuTab: false,
        // clickable: false
       },
+      
       {
         key: 'carouselInfoManager',
         name: '轮播信息管理',

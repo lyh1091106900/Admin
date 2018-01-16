@@ -5,6 +5,9 @@ var tableSearchInfo = {
   t_shop_item : ['productID'],
   t_exchange_item : ['name_En'],
   t_exchange_order : ['exchangeID'],
+  t_users : ['userid'],
+  t_recharge : ['userid'],
+  t_activity :['headline_En']
 }
 exports.index = function* () {
   const response = { success: false, message: '操作失败', }

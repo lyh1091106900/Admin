@@ -98,13 +98,45 @@ const Routers = function ({ history, app }) {
                   }
                 },
                 {
-                  path: 'edit/:tid',
+                  path: 'edit/:userid',
                   name: 'playerQueryEdit',
                   getComponent(nextState, cb) {
                     require.ensure([], require => {
                       registerModel(app, require('./models/playerForm'));
                       cb(null, require('./routes/playerQuery/playerForm'))
                     }, 'playerQuery')
+                  }
+                },
+              ]
+            },
+            {
+              path: 'carouselInfoManager',
+              name: 'carouselInfoManager',
+              getIndexRoute(nextState, cb) {
+                require.ensure([], require => {
+                  registerModel(app, require('./models/carouselInfoManager'))
+                  cb(null, { component: require('./routes/carouselInfoManager/') })
+                }, 'carouselInfoManager')
+              },
+              childRoutes: [
+                {
+                  path: 'create',
+                  name: 'carouselInfoCreate',
+                  getComponent(nextState, cb) {
+                    require.ensure([], require => {
+                      registerModel(app, require('./models/carouselForm'));
+                      cb(null, require('./routes/carouselInfoManager/carouselForm'))
+                    }, 'carouselInfoManager')
+                  }
+                },
+                {
+                  path: 'edit/:meID',
+                  name: 'carouselInfoEdit',
+                  getComponent(nextState, cb) {
+                    require.ensure([], require => {
+                      registerModel(app, require('./models/carouselForm'));
+                      cb(null, require('./routes/carouselInfoManager/carouselForm'))
+                    }, 'carouselInfoManager')
                   }
                 },
               ]
@@ -127,6 +159,16 @@ const Routers = function ({ history, app }) {
                   registerModel(app, require('./models/playerExInfo'));
                   cb(null, require('./routes/playerExInfo/'))
                 }, 'playerExInfo')
+              },
+            },
+            {
+              path: 'rechargeOrder',
+              name: 'rechargeOrder',
+              getComponent(nextState, cb) {
+                require.ensure([], require => {
+                  registerModel(app, require('./models/rechargeOrder'));
+                  cb(null, require('./routes/rechargeOrder/'))
+                }, 'rechargeOrder')
               },
             },
             {
@@ -177,6 +219,38 @@ const Routers = function ({ history, app }) {
                       registerModel(app, require('./models/shopItemForm'));
                       cb(null, require('./routes/shopItem/shopItemForm'))
                     }, 'shopItem')
+                  }
+                },
+              ]
+            },
+            {
+              path: 'activityManager',
+              name: 'activityManager',
+              getIndexRoute(nextState, cb) {
+                require.ensure([], require => {
+                  registerModel(app, require('./models/activityManager'));
+                  cb(null, { component: require('./routes/activityManager') })
+                }, 'activityManager')
+              },
+              childRoutes: [
+                {
+                  path: 'create',
+                  name: 'activityCreate',
+                  getComponent(nextState, cb) {
+                    require.ensure([], require => {
+                      registerModel(app, require('./models/activityForm'));
+                      cb(null, require('./routes/activityManager/activityForm'))
+                    }, 'activityManager')
+                  }
+                },
+                {
+                  path: 'edit/:acID',
+                  name: 'activityEdit',
+                  getComponent(nextState, cb) {
+                    require.ensure([], require => {
+                      registerModel(app, require('./models/activityForm'));
+                      cb(null, require('./routes/activityManager/activityForm'))
+                    }, 'activityManager')
                   }
                 },
               ]

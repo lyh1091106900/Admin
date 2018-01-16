@@ -7,19 +7,10 @@ var gstartTime, gendTime, guserid;
 const { MonthPicker, RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const columns = [
+	{ title: '订单号', dataIndex: 'rechargeID' },
+	{ title: '订单时间', dataIndex: 'creat_time' },
+	{ title: '添加钻石', dataIndex: 'increase_diamond' },
 	{ title: '用户ID', dataIndex: 'userid' },
-	{ title: '账号', dataIndex: 'account' },
-	{ title: '昵称', dataIndex: 'name' },
-	{ title: '性别', dataIndex: 'sex' },
-	{ title: '用户等级', dataIndex: 'lv' },
-	{ title: '用户经验', dataIndex: 'exp' },
-	{ title: '用户金币', dataIndex: 'coins' },
-	{ title: '用户存款', dataIndex: 'deposit' },
-	{ title: '用户钻石', dataIndex: 'gems' },
-	{ title: '语言', dataIndex: 'numlangu' },
-	{ title: '黑名单标志', dataIndex: 'black_flag' },
-	{ title: '机器人标志', dataIndex: 'robot_flag' },
-	{ title: '充值', width: 150 },
 
 ];
 
@@ -29,7 +20,7 @@ const linkStyle = {
 	cursor: 'pointer'
 };
 
-class playerQuery extends Component {
+class rechargeOrder extends Component {
 	static contextTypes = {
 		router: PropTypes.object
 	}
@@ -37,22 +28,14 @@ class playerQuery extends Component {
 	constructor(props, context) {
 		super(props, context);
 
-		const len = columns.length;
-		columns[len - 1].render = (text, record, index) => {
-			return (<div>
-				<span onClick={this.toplayerQueryForm.bind(this, record.userid)} style={linkStyle}>充值</span>
-			</div>)
-		}
-		columns[len - 2].render = (text, record) => {
-			return <Switch checked={!!!text} onChange={this.changeplayerQueryRobState.bind(this, record)} checkedChildren={'是'} unCheckedChildren={'否'} />
-		}
-		columns[len - 3].render = (text, record) => {
-			return <Switch checked={!!!text} onChange={this.changeplayerQueryBlaState.bind(this, record)} checkedChildren={'是'} unCheckedChildren={'否'} />
-		}
+		 const len = columns.length;
 		// columns[len - 3].render = (text, record) => {
-		// 	var time = new Date(record.time * 1000)
-		// 	return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
+		//   return record.order_flag==1?'已支付':'待支付';
 		// }
+		columns[len - 3].render = (text, record) => {
+			var time = new Date(record.time)
+			return (time.getFullYear() + '-' + (parseInt(time.getMonth())+1).toString() + '-' + time.getDate())
+		}
 	}
 
 	componentDidMount() {
@@ -60,8 +43,7 @@ class playerQuery extends Component {
 	}
 
 	loadTableData(page = 1, pageSize = 10, startTime, endTime, userid) {
-		console.log(userid);
-		this.props.dispatch({ type: 'playerQuery/loadPlayerQuery', payload: { page, pageSize, startTime, endTime, userid } });
+		this.props.dispatch({ type: 'rechargeOrder/loadRechargeOrder', payload: { page, pageSize, startTime, endTime, userid } });
 	}
 
 	tableChange(pagination) {
@@ -72,37 +54,25 @@ class playerQuery extends Component {
 	}
 
 	selectRow(selectedRowKeys) {
-		console.log('selectRow',selectedRowKeys)
-		this.props.dispatch({ type: 'playerQuery/selectedRowKeys', payload: { selectedRowKeys } });
+		console.log('selectRows',selectedRowKeys)
+		this.props.dispatch({ type: 'rechargeOrder/selectedRowKeys', payload: { selectedRowKeys } });
 	}
 
-	toplayerQueryForm(userid) {
-		if (userid) {
-			this.context.router.push({ pathname: `/CambodiaChress/playerQuery/edit/${userid}` });
-		} else {
-			this.context.router.push({ pathname: '/CambodiaChress/playerQuery/create' });
-		}
+	toplayerQueryForm(tid) {
+		// if (tid) {
+		// 	this.context.router.push({ pathname: `/CambodiaChress/playerQuery/edit/${tid}` });
+		// } else {
+		// 	this.context.router.push({ pathname: '/CambodiaChress/playerQuery/create' });
+		// }
 	}
 
-	changeplayerQueryRobState(record) {
-		console.log("switchChange", record.robot_flag);
-		const robot_flag = record.robot_flag ? 0 : 1;
+	changeplayerQueryState(record) {
+		console.log("switchChange", record);
+		const status = record.status ? 0 : 1;
 		this.props.dispatch({
-			type: 'playerQuery/updatePlayerQuery', payload: {
+			type: 'rechargeOrder/loadRechargeOrder', payload: {
 				...record,
-				robot_flag,
-				page: this.props.pagination.current,
-				pageSize: this.props.pagination.pageSize
-			}
-		});
-	}
-	changeplayerQueryBlaState(record) {
-		console.log("switchChange", record.black_flag);
-		const black_flag = record.black_flag ? 0 : 1;
-		this.props.dispatch({
-			type: 'playerQuery/updatePlayerQuery', payload: {
-				...record,
-				black_flag,
+				status,
 				page: this.props.pagination.current,
 				pageSize: this.props.pagination.pageSize
 			}
@@ -122,7 +92,7 @@ class playerQuery extends Component {
 							templateArr.push(v.template);
 						}
 					});
-					this.props.dispatch({ type: 'playerQuery/removePlayerQuery', payload: { selectedRowKeys: this.props.selectedRowKeys, templateArr } })
+					this.props.dispatch({ type: 'rechargeOrder/removeRechargeOrder', payload: { selectedRowKeys: this.props.selectedRowKeys, templateArr } })
 				}
 			});
 		} else {
@@ -143,9 +113,9 @@ class playerQuery extends Component {
 				console.log(Date.parse(new Date(dateString[i])), dateString[i])
 				timeArray.push(Date.parse(new Date(dateString[i])))
 			}
-			gstartTime = timeArray[0] / 1000;
-			gendTime = timeArray[1] / 1000;
-			//this.loadTableData(1, 10, gstartTime, gendTime);
+			gstartTime = timeArray[0] ;
+			gendTime = timeArray[1] ;
+			this.loadTableData(1, 10, gstartTime, gendTime);
 		}
 		else {
 			gstartTime = null;
@@ -181,11 +151,12 @@ class playerQuery extends Component {
 		return (
 			<div className="content-inner">
 				<div style={{ paddingBottom: 10, marginBottom: 20, borderBottom: '1px solid #ddd' }}>
-					<Button type="primary" onClick={this.deleteplayerQuery.bind(this)} style={{ marginRight: 10 }}>删除</Button>
-					{/* <RangePicker style={{ marginRight: 10 }}
+					{/* <Button type="primary" onClick={this.toplayerQueryForm.bind(this, 0)} style={{ marginRight: 10 }}>新增</Button>
+					<Button type="primary" onClick={this.deleteplayerQuery.bind(this)} style={{ marginRight: 10 }}>删除</Button> */}
+					<RangePicker style={{ marginRight: 10 }}
 						format={dateFormat}
 						onChange={this.dateSearch.bind(this)}
-					/> */}
+					/>
 					<InputNumber onChange={this.setInputId.bind(this)} style={{ marginRight: 10 }}/>
 					{/* <Input onChange={value =>this.setInputId(value)} style={{ marginRight: 10 ,width:120 }}/> */}
 					<Button type="primary" onClick={this.Search.bind(this)} icon="search">查询</Button>
@@ -195,7 +166,7 @@ class playerQuery extends Component {
 					rowSelection={rowSelection}
 					pagination={pagination}
 					dataSource={this.props.list}
-					rowKey="userid"
+					rowKey="rechargeID"
 					loading={this.props.loading}
 					bordered
 					onChange={this.tableChange.bind(this)} />
@@ -204,12 +175,12 @@ class playerQuery extends Component {
 	}
 };
 
-export default connect(({ playerQuery }) => {
+export default connect(({ rechargeOrder }) => {
 	return {
-		list: playerQuery.list,
-		loading: playerQuery.loading,
-		total: playerQuery.total,
-		selectedRowKeys: playerQuery.selectedRowKeys,
-		pagination: playerQuery.pagination
+		list: rechargeOrder.list,
+		loading: rechargeOrder.loading,
+		total: rechargeOrder.total,
+		selectedRowKeys: rechargeOrder.selectedRowKeys,
+		pagination: rechargeOrder.pagination
 	}
-})(playerQuery);
+})(rechargeOrder);

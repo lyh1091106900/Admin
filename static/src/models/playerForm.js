@@ -1,13 +1,10 @@
-import { loadTable, update, save, uploadImage, addTable, updateTable } from '../services/playerForm';
+import {saveAddOrder, loadTable, update, save, uploadImage, addTable, updateTable } from '../services/playerForm';
 
 const initState = {
-	tid: '',
+	userid: '',
 	name: '',
-	link: '',
-	ord: '',
-	status: 1,
-	time: '',
-	uid: 0
+	gems: '',
+	
 };
 
 export default {
@@ -30,24 +27,27 @@ export default {
 			let data = null,tableData=null;
 			const callback = payload.callback;
 			delete payload.callback;
-			//	console.log("payload",payload);
+		//	console.log("payload",this.state.gems);
+			const newgems =parseInt(payload.gems)+parseInt(payload.addGems);
 			const params = {
 				name: payload.name || "",
-				link: payload.link,
-				ord:payload.ord,
-				status: payload.status || 0,
-				time: payload.time,
-				uid: payload.uid
+				userid : payload.userid || "",
+				gems : newgems
 			};
 
-			if (payload.tid) {
-				params.tid = payload.tid;
+			const paramsAdd = {
+				userid : payload.userid || "",
+				increase_diamond : payload.addGems
+			};
+
+			
+				params.userid = payload.userid;
 				data = yield call(update, params);
 			    //tableData = yield call(updateTable,{tableName:payload.template,data:payload.cont});
-			} else {
-				data = yield call(save, params);
-				//tableData = yield call(addTable,{tableName:payload.template,data:payload.cont});
-			}
+		        if (data && data.success) {
+					paramsAdd.creat_time= Date.parse(new Date());  
+					yield call(saveAddOrder,paramsAdd);
+				}
 
 			yield put({ type: 'loadSuccess', payload: data });
 			callback && callback(data);

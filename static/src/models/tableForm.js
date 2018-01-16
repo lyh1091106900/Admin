@@ -39,10 +39,12 @@ export default {
 			};
 
 			if (payload.id) {
+			//	console.log("payload12",payload.id);
 				params.id = payload.id;
 				data = yield call(update, params);
 				tableData = yield call(updateTable,{tableName:payload.template,data:payload.cont});
 			} else {
+			//	console.log("payload22",payload.id);
 				data = yield call(save, params);
 				tableData = yield call(addTable,{tableName:payload.template,data:payload.cont});
 			}

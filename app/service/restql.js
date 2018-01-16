@@ -108,7 +108,7 @@ module.exports = app => {
     * update(modal, id, request) {
       console.log('update1', request);
       const modalId = yield this.service.tableinfo.primaryKey(modal);
-      console.log('update2', request);
+     // console.log('update2', request);
       let upstr = `update ${modal} set `;
       let upEscape = [];
       for (const key in request) {
@@ -118,13 +118,14 @@ module.exports = app => {
       }
       upstr += ` where ${modalId} = ?`;
       upEscape.push(id);
-      // console.log('update', upstr, upEscape)
+       console.log('update', upstr, upEscape)
       let result = yield app.mysql.query(upstr, upEscape);
       return result;
     }
     * create(modal, request) {
       console.log('create', modal, request);
       const result = yield this.app.mysql.insert(modal, request);
+      console.log('update3', result);
       return result;
     }
     * destroy(modal, params) {
